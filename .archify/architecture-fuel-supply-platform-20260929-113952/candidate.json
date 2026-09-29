@@ -21,7 +21,7 @@
       "sublabel": ":8000 · REST /v1/* + SSE",
       "pos": [
         70,
-        76
+        140
       ],
       "size": [
         200,
@@ -53,7 +53,7 @@
       "tag": "only egress to /v1/*",
       "pos": [
         370,
-        76
+        140
       ],
       "size": [
         200,
@@ -86,8 +86,8 @@
       "label": "Collector",
       "sublabel": "poll 30 s · SSE trigger",
       "pos": [
-        700,
-        76
+        674,
+        140
       ],
       "size": [
         200,
@@ -120,8 +120,8 @@
       "label": "PostgreSQL 16",
       "sublabel": "22 tables · :5432",
       "pos": [
-        1030,
-        76
+        972,
+        140
       ],
       "size": [
         200,
@@ -153,8 +153,8 @@
       "label": "Fuel Operator",
       "sublabel": "approve · acknowledge",
       "pos": [
-        1370,
-        76
+        1512,
+        300
       ],
       "size": [
         200,
@@ -179,11 +179,11 @@
       "label": "FastAPI API",
       "sublabel": ":8080 · /api/* · /health · /metrics",
       "pos": [
-        1030,
-        270
+        1242,
+        140
       ],
       "size": [
-        210,
+        200,
         66
       ],
       "sources": [
@@ -211,8 +211,8 @@
       "label": "Operator Dashboard",
       "sublabel": ":3000 · Overview…Health",
       "pos": [
-        1370,
-        270
+        1512,
+        140
       ],
       "size": [
         200,
@@ -238,11 +238,11 @@
       "label": "Detect & Predict",
       "sublabel": "quantile GBM P10/P50/P90",
       "pos": [
-        700,
-        464
+        560,
+        560
       ],
       "size": [
-        210,
+        200,
         66
       ],
       "sources": [
@@ -272,11 +272,11 @@
       "label": "Optimizer (LP)",
       "sublabel": "PuLP/CBC · depot fallback",
       "pos": [
-        1030,
-        464
+        856,
+        560
       ],
       "size": [
-        210,
+        200,
         66
       ],
       "sources": [
@@ -305,8 +305,8 @@
       "label": "GenAI Explainer",
       "sublabel": "3 sentences · template fallback",
       "pos": [
-        1360,
-        464
+        1130,
+        560
       ],
       "size": [
         200,
@@ -329,7 +329,7 @@
   "boundaries": [
     {
       "kind": "region",
-      "label": "Organizer-provided world — reached only over /v1/*",
+      "label": "Organizer world",
       "wraps": [
         "simulator"
       ]
@@ -382,9 +382,8 @@
       "from": "detect",
       "to": "db",
       "label": "forecasts · risk",
-      "fromSide": "bottom",
-      "toSide": "top",
-      "route": "auto"
+      "fromSide": "top",
+      "toSide": "bottom"
     },
     {
       "id": "recommend",
@@ -392,29 +391,31 @@
       "to": "db",
       "label": "recommendations",
       "fromSide": "top",
-      "toSide": "right"
+      "toSide": "bottom"
     },
     {
       "id": "state-query",
       "from": "db",
       "to": "api",
       "label": "SQL read",
-      "fromSide": "bottom",
+      "fromSide": "right",
       "toSide": "left"
     },
     {
       "id": "serve",
       "from": "api",
       "to": "dashboard",
-      "label": "REST JSON"
+      "label": "REST JSON",
+      "fromSide": "right",
+      "toSide": "left"
     },
     {
       "id": "show",
       "from": "dashboard",
       "to": "operator",
       "label": "shows state",
-      "fromSide": "top",
-      "toSide": "bottom"
+      "fromSide": "bottom",
+      "toSide": "top"
     },
     {
       "id": "approve",
@@ -423,7 +424,7 @@
       "label": "approve · ack",
       "variant": "emphasis",
       "fromSide": "left",
-      "toSide": "right"
+      "toSide": "bottom"
     },
     {
       "id": "write-back",
@@ -431,9 +432,18 @@
       "to": "simclient",
       "label": "POST /v1/allocations · idempotency-keyed",
       "variant": "emphasis",
-      "fromSide": "left",
+      "fromSide": "bottom",
       "toSide": "bottom",
-      "route": "auto"
+      "via": [
+        [
+          1342,
+          660
+        ],
+        [
+          470,
+          660
+        ]
+      ]
     },
     {
       "id": "risk-handoff",

@@ -1,24 +1,27 @@
 {
   "schemaVersion": 1,
-  "ok": false,
+  "ok": true,
   "command": "finalize",
-  "status": "fail",
+  "status": "pass",
   "type": "architecture",
   "quality": "showcase",
-  "startedAt": "2026-09-29T05:40:41.835Z",
+  "startedAt": "2026-09-29T06:27:10.552Z",
   "specification": {
     "path": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/candidate.json",
-    "sha256": "2f00d8cd5d548276d0c3e553b8bcf74e9135f177723072d81cc7978b2a1e6949",
-    "bytes": 11862
+    "sha256": "289fe9f0181d0dce084b66991d5a8af2e69a1f4a5010bcae081d8887dc797d3c",
+    "bytes": 11960
   },
   "artifact": {
-    "path": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html"
+    "path": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html",
+    "sha256": "514767a7ed810405911d1bbf22caf49c95dfd17ea38c0c561db04492097c53cf",
+    "bytes": 776600
   },
   "stages": {
     "validate": {
-      "status": "fail",
-      "exitCode": 1,
+      "status": "pass",
+      "exitCode": 0,
       "durationMs": null,
+      "execution": "embedded-in-deliver",
       "command": [
         "/home/xenon/.var/app/com.visualstudio.code/config/nvm/versions/node/v24.12.0/bin/node",
         "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.agents/skills/archify/bin/archify.mjs",
@@ -34,125 +37,69 @@
       ],
       "receipt": {
         "schemaVersion": 1,
-        "ok": false,
+        "ok": true,
+        "command": "validate",
+        "specification": {
+          "sha256": "289fe9f0181d0dce084b66991d5a8af2e69a1f4a5010bcae081d8887dc797d3c",
+          "bytes": 11960
+        },
+        "validation": {
+          "checksPassed": 9,
+          "checkCount": 9,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        }
+      }
+    },
+    "deliver": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 277,
+      "command": [
+        "/home/xenon/.var/app/com.visualstudio.code/config/nvm/versions/node/v24.12.0/bin/node",
+        "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.agents/skills/archify/bin/archify.mjs",
+        "deliver",
+        "architecture",
+        "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/candidate.json",
+        "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "/home/xenon/Documents/GitHub/BUP_Hackathon_Final",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "receiptId": "cb46b28d-2137-4249-8635-281f9e0dd442",
+        "ok": true,
         "command": "deliver",
-        "receiptId": "fa18ef63-ec1a-4d08-8243-4480534c6144",
-        "stage": "render",
         "type": "architecture",
         "input": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/candidate.json",
         "output": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html",
-        "error": "Architecture layout validation failed:\n- [composition/label-route-clearance] showcase architecture label \"upsert + append\" on connections[2] id \"persist\" \"collector\" -> \"db\" label \"upsert + append\" is 0px from connections[3] id \"forecast\" \"detect\" -> \"db\" label \"forecasts · risk\" segment 2 [998, 554] -> [998, 52] (label rect [924, 89, 82, 14]; minimum 4px) — if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel.\n- [composition/label-route-clearance] showcase architecture label \"risk · needs\" on connections[10] id \"risk-handoff\" \"detect\" -> \"optimizer\" label \"risk · needs\" is 0px from connections[3] id \"forecast\" \"detect\" -> \"db\" label \"forecasts · risk\" segment 2 [998, 554] -> [998, 52] (label rect [936, 477, 68, 14]; minimum 4px) — if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel.",
-        "diagnostics": [
-          {
-            "code": "composition/label-route-clearance",
-            "severity": "error",
-            "message": "[composition/label-route-clearance] showcase architecture label \"upsert + append\" on connections[2] id \"persist\" \"collector\" -> \"db\" label \"upsert + append\" is 0px from connections[3] id \"forecast\" \"detect\" -> \"db\" label \"forecasts · risk\" segment 2 [998, 554] -> [998, 52] (label rect [924, 89, 82, 14]; minimum 4px) — if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel.",
-            "subject": {
-              "diagramType": "architecture",
-              "collection": "connections",
-              "index": 2,
-              "id": "persist",
-              "from": "collector",
-              "to": "db"
-            },
-            "evidence": {
-              "label": "upsert + append",
-              "otherRelationship": {
-                "diagramType": "architecture",
-                "collection": "connections",
-                "index": 3,
-                "id": "forecast",
-                "from": "detect",
-                "to": "db"
-              },
-              "segmentIndex": 2,
-              "clearancePx": 0,
-              "minimumPx": 4,
-              "labelRect": {
-                "relation": {
-                  "id": "persist",
-                  "from": "collector",
-                  "to": "db",
-                  "label": "upsert + append"
-                },
-                "relationIndex": 2,
-                "label": "upsert + append",
-                "x": 924,
-                "y": 89,
-                "width": 82,
-                "height": 14,
-                "lx": 965,
-                "ly": 99
-              },
-              "from": [
-                998,
-                554
-              ],
-              "to": [
-                998,
-                52
-              ]
-            },
-            "supportedFixes": [
-              "if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel"
-            ]
-          },
-          {
-            "code": "composition/label-route-clearance",
-            "severity": "error",
-            "message": "[composition/label-route-clearance] showcase architecture label \"risk · needs\" on connections[10] id \"risk-handoff\" \"detect\" -> \"optimizer\" label \"risk · needs\" is 0px from connections[3] id \"forecast\" \"detect\" -> \"db\" label \"forecasts · risk\" segment 2 [998, 554] -> [998, 52] (label rect [936, 477, 68, 14]; minimum 4px) — if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel.",
-            "subject": {
-              "diagramType": "architecture",
-              "collection": "connections",
-              "index": 10,
-              "id": "risk-handoff",
-              "from": "detect",
-              "to": "optimizer"
-            },
-            "evidence": {
-              "label": "risk · needs",
-              "otherRelationship": {
-                "diagramType": "architecture",
-                "collection": "connections",
-                "index": 3,
-                "id": "forecast",
-                "from": "detect",
-                "to": "db"
-              },
-              "segmentIndex": 2,
-              "clearancePx": 0,
-              "minimumPx": 4,
-              "labelRect": {
-                "relation": {
-                  "id": "risk-handoff",
-                  "from": "detect",
-                  "to": "optimizer",
-                  "label": "risk · needs"
-                },
-                "relationIndex": 10,
-                "label": "risk · needs",
-                "x": 936.2,
-                "y": 477,
-                "width": 67.6,
-                "height": 14,
-                "lx": 970,
-                "ly": 487
-              },
-              "from": [
-                998,
-                554
-              ],
-              "to": [
-                998,
-                52
-              ]
-            },
-            "supportedFixes": [
-              "if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel"
-            ]
-          }
-        ],
-        "provenance": "absent",
+        "specification": {
+          "sha256": "289fe9f0181d0dce084b66991d5a8af2e69a1f4a5010bcae081d8887dc797d3c",
+          "bytes": 11960
+        },
+        "artifact": {
+          "sha256": "514767a7ed810405911d1bbf22caf49c95dfd17ea38c0c561db04492097c53cf",
+          "bytes": 776600
+        },
+        "validation": {
+          "checksPassed": 9,
+          "checkCount": 9,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        },
+        "evidence": {
+          "verified": true,
+          "repository": "https://github.com/Alpha-coder25/BUP_Hackathon_Final",
+          "revision": "c40bd40c5ff82591065a8f636b227dd850faa70a",
+          "references": 27
+        },
         "update": {
           "status": "unavailable",
           "installedVersion": null,
@@ -164,132 +111,935 @@
           "noticeText": null,
           "reason": "disabled"
         }
-      },
-      "execution": "embedded-in-deliver"
+      }
     },
-    "deliver": {
-      "status": "not-run",
-      "execution": "blocked-by-validate"
+    "check": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 87,
+      "command": [
+        "/home/xenon/.var/app/com.visualstudio.code/config/nvm/versions/node/v24.12.0/bin/node",
+        "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.agents/skills/archify/bin/archify.mjs",
+        "check",
+        "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html",
+        "--require-provenance"
+      ],
+      "receipt": {
+        "ok": true,
+        "file": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html",
+        "artifact": {
+          "sha256": "514767a7ed810405911d1bbf22caf49c95dfd17ea38c0c561db04492097c53cf",
+          "bytes": 776600
+        },
+        "checks": [
+          {
+            "name": "single_svg",
+            "ok": true,
+            "details": [
+              "found 1 <svg> block(s)"
+            ]
+          },
+          {
+            "name": "finite_svg",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "orthogonal_arrows",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "label_route_clearance",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "relationship_crossings",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "relationship_corridors",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "container_border_runs",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "route_rhythm",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "legend_clearance",
+            "ok": true,
+            "details": []
+          }
+        ],
+        "composition": {
+          "schemaVersion": 1,
+          "profile": "showcase",
+          "status": "pass",
+          "summary": {
+            "errors": 0,
+            "warnings": 0
+          },
+          "metrics": {
+            "properCrossings": 0,
+            "resolvedCrossovers": 0,
+            "ambiguousCorridors": 0,
+            "arrowheadCollisions": 0,
+            "containerBorderRuns": 0,
+            "labelRouteClearanceIssues": 0,
+            "labelCanvasOverflowIssues": 0,
+            "minLabelRouteClearance": 37,
+            "desktopReadabilityIssues": 0,
+            "viewportHeightIssues": 0,
+            "minProjectedNodeTextPx": 6.042648709315376,
+            "maxBends": 2,
+            "routesOverSuggestedBends": 0,
+            "maxStretch": 2.041,
+            "routesOverSuggestedStretch": 1,
+            "minSegmentPx": 24,
+            "minInteriorSegmentPx": 123,
+            "shortSegmentCount": 0,
+            "shortEndpointSegmentCount": 0,
+            "shortInteriorSegmentCount": 0,
+            "microSegmentCount": 0
+          },
+          "suggestedLimits": {
+            "bendsPerRelationship": 2,
+            "stretch": 1.35,
+            "segmentPx": 16,
+            "microSegmentPx": 8
+          },
+          "routeReview": {
+            "crossings": [],
+            "detours": [
+              {
+                "relationship": {
+                  "id": "write-back",
+                  "from": "api",
+                  "to": "simclient",
+                  "label": "POST /v1/allocations · idempotency-keyed",
+                  "collectionIndex": 9,
+                  "artifactIndex": 10
+                },
+                "bends": 2,
+                "stretch": 2.041,
+                "directCorridorBlockers": [
+                  {
+                    "id": "collector",
+                    "label": "Collector",
+                    "box": [
+                      674,
+                      140,
+                      200,
+                      66
+                    ]
+                  },
+                  {
+                    "id": "db",
+                    "label": "PostgreSQL 16",
+                    "box": [
+                      972,
+                      140,
+                      200,
+                      66
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "leadingSpace": {
+            "measured": true,
+            "emptyTopPx": 110,
+            "emptyTopRatio": 0.151,
+            "occupiedTop": 110,
+            "viewBoxTop": 0,
+            "canvasHeight": 728,
+            "typicalNodeHeight": 66,
+            "reviewSuggested": false
+          },
+          "desktopReadability": {
+            "budgetBasis": "recognized-declared-wide",
+            "readerContract": "declared-wide-v1",
+            "availableDiagramWidth": 1346,
+            "actualBudgetPx": 1346,
+            "actualReaderWidth": 1376,
+            "desiredReaderWidth": 1700.625,
+            "viewportCap": 1376,
+            "limit": "viewport-cap",
+            "requestedTargetPx": 7.5,
+            "requestedTargetMet": false,
+            "hardFloorPx": 6,
+            "hardFloorMet": true,
+            "minimumOwner": {
+              "kind": "edge",
+              "id": "read-v1",
+              "from": "simulator",
+              "to": "simclient"
+            },
+            "minimumSourceTextPx": 8,
+            "minimumProjectedTextPx": 6.042648709315376,
+            "semanticTextCount": 35
+          },
+          "issues": []
+        },
+        "provenance": "current",
+        "deliveryReceiptId": "cb46b28d-2137-4249-8635-281f9e0dd442"
+      }
+    },
+    "browser-check": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 1072,
+      "command": [
+        "/home/xenon/.var/app/com.visualstudio.code/config/nvm/versions/node/v24.12.0/bin/node",
+        "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.agents/skills/archify/bin/archify.mjs",
+        "browser-check",
+        "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html",
+        "--json",
+        "--require-provenance"
+      ],
+      "execution": "in-process",
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": true,
+        "command": "browser-check",
+        "evidenceKind": "automated-browser",
+        "status": "pass",
+        "visualReview": "not-requested",
+        "provenance": "current",
+        "deliveryReceiptId": "cb46b28d-2137-4249-8635-281f9e0dd442",
+        "artifact": {
+          "path": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html",
+          "sha256": "514767a7ed810405911d1bbf22caf49c95dfd17ea38c0c561db04492097c53cf",
+          "bytes": 776600
+        },
+        "state": {
+          "detail": "read",
+          "motion": "still"
+        },
+        "chrome": {
+          "status": "available",
+          "executable": "/usr/bin/google-chrome"
+        },
+        "diagnostics": [],
+        "containment": {
+          "status": "pass",
+          "policy": "fit-or-reader-declared-readable-vertical-scroll",
+          "viewports": [
+            {
+              "width": 1440,
+              "height": 900,
+              "theme": "light",
+              "innerWidth": 1440,
+              "innerHeight": 900,
+              "scrollWidth": 1440,
+              "scrollHeight": 900,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1376,
+              "diagramWidth": 1346,
+              "pageComposition": {
+                "bodyPaddingPx": 12,
+                "headerPx": 52,
+                "diagramChromePx": 78,
+                "svgPx": 550,
+                "cardsPx": 0,
+                "viewBoxHeight": 728
+              },
+              "viewBoxWidth": 1782,
+              "minimumProjectedNodeTextPx": 6.042648709315376,
+              "minimumProjectedNonEdgeTextPx": 6.797979797979798,
+              "minimumProjectedEdgeTextPx": 6.042648709315376,
+              "minimumProjectedNodeText": "GET /v1/* reads",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "read-v1",
+                "from": "simulator",
+                "to": "simclient"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1600,
+              "height": 1000,
+              "theme": "light",
+              "innerWidth": 1600,
+              "innerHeight": 1000,
+              "scrollWidth": 1600,
+              "scrollHeight": 1000,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1536,
+              "diagramWidth": 1506,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 615,
+                "cardsPx": 0,
+                "viewBoxHeight": 728
+              },
+              "viewBoxWidth": 1782,
+              "minimumProjectedNodeTextPx": 6.760942760942761,
+              "minimumProjectedNonEdgeTextPx": 7.606060606060606,
+              "minimumProjectedEdgeTextPx": 6.760942760942761,
+              "minimumProjectedNodeText": "GET /v1/* reads",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "read-v1",
+                "from": "simulator",
+                "to": "simclient"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "theme": "light",
+              "innerWidth": 1920,
+              "innerHeight": 1080,
+              "scrollWidth": 1920,
+              "scrollHeight": 1080,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1856,
+              "diagramWidth": 1826,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 746,
+                "cardsPx": 0,
+                "viewBoxHeight": 728
+              },
+              "viewBoxWidth": 1782,
+              "minimumProjectedNodeTextPx": 8,
+              "minimumProjectedNonEdgeTextPx": 9,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "GET /v1/* reads",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "read-v1",
+                "from": "simulator",
+                "to": "simclient"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "theme": "light",
+              "innerWidth": 2048,
+              "innerHeight": 1320,
+              "scrollWidth": 2048,
+              "scrollHeight": 1320,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1920,
+              "diagramWidth": 1870,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 68,
+                "diagramChromePx": 94,
+                "svgPx": 764,
+                "cardsPx": 0,
+                "viewBoxHeight": 728
+              },
+              "viewBoxWidth": 1782,
+              "minimumProjectedNodeTextPx": 8,
+              "minimumProjectedNonEdgeTextPx": 9,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "GET /v1/* reads",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "read-v1",
+                "from": "simulator",
+                "to": "simclient"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 44,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            }
+          ]
+        },
+        "themeStates": {
+          "status": "pass",
+          "viewports": [
+            {
+              "width": 1440,
+              "height": 900,
+              "requestedTheme": "light",
+              "resolvedTheme": "light",
+              "ok": true
+            },
+            {
+              "width": 1600,
+              "height": 1000,
+              "requestedTheme": "light",
+              "resolvedTheme": "light",
+              "ok": true
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "requestedTheme": "light",
+              "resolvedTheme": "light",
+              "ok": true
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "requestedTheme": "light",
+              "resolvedTheme": "light",
+              "ok": true
+            },
+            {
+              "width": 1440,
+              "height": 900,
+              "requestedTheme": "dark",
+              "resolvedTheme": "dark",
+              "ok": true
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "requestedTheme": "dark",
+              "resolvedTheme": "dark",
+              "ok": true
+            }
+          ]
+        },
+        "readability": {
+          "status": "pass",
+          "minimumProjectedNodeTextPx": 6,
+          "viewports": [
+            {
+              "width": 1440,
+              "height": 900,
+              "theme": "light",
+              "innerWidth": 1440,
+              "innerHeight": 900,
+              "scrollWidth": 1440,
+              "scrollHeight": 900,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1376,
+              "diagramWidth": 1346,
+              "pageComposition": {
+                "bodyPaddingPx": 12,
+                "headerPx": 52,
+                "diagramChromePx": 78,
+                "svgPx": 550,
+                "cardsPx": 0,
+                "viewBoxHeight": 728
+              },
+              "viewBoxWidth": 1782,
+              "minimumProjectedNodeTextPx": 6.042648709315376,
+              "minimumProjectedNonEdgeTextPx": 6.797979797979798,
+              "minimumProjectedEdgeTextPx": 6.042648709315376,
+              "minimumProjectedNodeText": "GET /v1/* reads",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "read-v1",
+                "from": "simulator",
+                "to": "simclient"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1600,
+              "height": 1000,
+              "theme": "light",
+              "innerWidth": 1600,
+              "innerHeight": 1000,
+              "scrollWidth": 1600,
+              "scrollHeight": 1000,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1536,
+              "diagramWidth": 1506,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 615,
+                "cardsPx": 0,
+                "viewBoxHeight": 728
+              },
+              "viewBoxWidth": 1782,
+              "minimumProjectedNodeTextPx": 6.760942760942761,
+              "minimumProjectedNonEdgeTextPx": 7.606060606060606,
+              "minimumProjectedEdgeTextPx": 6.760942760942761,
+              "minimumProjectedNodeText": "GET /v1/* reads",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "read-v1",
+                "from": "simulator",
+                "to": "simclient"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "theme": "light",
+              "innerWidth": 1920,
+              "innerHeight": 1080,
+              "scrollWidth": 1920,
+              "scrollHeight": 1080,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1856,
+              "diagramWidth": 1826,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 746,
+                "cardsPx": 0,
+                "viewBoxHeight": 728
+              },
+              "viewBoxWidth": 1782,
+              "minimumProjectedNodeTextPx": 8,
+              "minimumProjectedNonEdgeTextPx": 9,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "GET /v1/* reads",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "read-v1",
+                "from": "simulator",
+                "to": "simclient"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "theme": "light",
+              "innerWidth": 2048,
+              "innerHeight": 1320,
+              "scrollWidth": 2048,
+              "scrollHeight": 1320,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1920,
+              "diagramWidth": 1870,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 68,
+                "diagramChromePx": 94,
+                "svgPx": 764,
+                "cardsPx": 0,
+                "viewBoxHeight": 728
+              },
+              "viewBoxWidth": 1782,
+              "minimumProjectedNodeTextPx": 8,
+              "minimumProjectedNonEdgeTextPx": 9,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "GET /v1/* reads",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "read-v1",
+                "from": "simulator",
+                "to": "simclient"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 44,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            }
+          ]
+        },
+        "viewerChrome": {
+          "status": "pass",
+          "viewports": [
+            {
+              "width": 1440,
+              "height": 900,
+              "theme": "light",
+              "innerWidth": 1440,
+              "innerHeight": 900,
+              "scrollWidth": 1440,
+              "scrollHeight": 900,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1376,
+              "diagramWidth": 1346,
+              "pageComposition": {
+                "bodyPaddingPx": 12,
+                "headerPx": 52,
+                "diagramChromePx": 78,
+                "svgPx": 550,
+                "cardsPx": 0,
+                "viewBoxHeight": 728
+              },
+              "viewBoxWidth": 1782,
+              "minimumProjectedNodeTextPx": 6.042648709315376,
+              "minimumProjectedNonEdgeTextPx": 6.797979797979798,
+              "minimumProjectedEdgeTextPx": 6.042648709315376,
+              "minimumProjectedNodeText": "GET /v1/* reads",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "read-v1",
+                "from": "simulator",
+                "to": "simclient"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1600,
+              "height": 1000,
+              "theme": "light",
+              "innerWidth": 1600,
+              "innerHeight": 1000,
+              "scrollWidth": 1600,
+              "scrollHeight": 1000,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1536,
+              "diagramWidth": 1506,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 615,
+                "cardsPx": 0,
+                "viewBoxHeight": 728
+              },
+              "viewBoxWidth": 1782,
+              "minimumProjectedNodeTextPx": 6.760942760942761,
+              "minimumProjectedNonEdgeTextPx": 7.606060606060606,
+              "minimumProjectedEdgeTextPx": 6.760942760942761,
+              "minimumProjectedNodeText": "GET /v1/* reads",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "read-v1",
+                "from": "simulator",
+                "to": "simclient"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "theme": "light",
+              "innerWidth": 1920,
+              "innerHeight": 1080,
+              "scrollWidth": 1920,
+              "scrollHeight": 1080,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1856,
+              "diagramWidth": 1826,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 746,
+                "cardsPx": 0,
+                "viewBoxHeight": 728
+              },
+              "viewBoxWidth": 1782,
+              "minimumProjectedNodeTextPx": 8,
+              "minimumProjectedNonEdgeTextPx": 9,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "GET /v1/* reads",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "read-v1",
+                "from": "simulator",
+                "to": "simclient"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "theme": "light",
+              "innerWidth": 2048,
+              "innerHeight": 1320,
+              "scrollWidth": 2048,
+              "scrollHeight": 1320,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "intrinsic-height",
+              "ok": true,
+              "readerWidth": 1920,
+              "diagramWidth": 1870,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 68,
+                "diagramChromePx": 94,
+                "svgPx": 764,
+                "cardsPx": 0,
+                "viewBoxHeight": 728
+              },
+              "viewBoxWidth": 1782,
+              "minimumProjectedNodeTextPx": 8,
+              "minimumProjectedNonEdgeTextPx": 9,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "GET /v1/* reads",
+              "minimumProjectedNodeTextDetail": "edge",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "edge",
+                "id": "read-v1",
+                "from": "simulator",
+                "to": "simclient"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 44,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            }
+          ]
+        },
+        "captures": {
+          "status": "not-requested",
+          "screenshots": [],
+          "contactSheet": null
+        },
+        "sidecars": {
+          "receipt": "fuel-supply-platform.browser-check.json",
+          "files": []
+        }
+      }
     }
   },
-  "diagnostics": [
-    {
-      "code": "composition/label-route-clearance",
-      "severity": "error",
-      "message": "[composition/label-route-clearance] showcase architecture label \"upsert + append\" on connections[2] id \"persist\" \"collector\" -> \"db\" label \"upsert + append\" is 0px from connections[3] id \"forecast\" \"detect\" -> \"db\" label \"forecasts · risk\" segment 2 [998, 554] -> [998, 52] (label rect [924, 89, 82, 14]; minimum 4px) — if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel.",
-      "subject": {
-        "diagramType": "architecture",
-        "collection": "connections",
-        "index": 2,
-        "id": "persist",
-        "from": "collector",
-        "to": "db"
-      },
-      "evidence": {
-        "label": "upsert + append",
-        "otherRelationship": {
-          "diagramType": "architecture",
-          "collection": "connections",
-          "index": 3,
-          "id": "forecast",
-          "from": "detect",
-          "to": "db"
-        },
-        "segmentIndex": 2,
-        "clearancePx": 0,
-        "minimumPx": 4,
-        "labelRect": {
-          "relation": {
-            "id": "persist",
-            "from": "collector",
-            "to": "db",
-            "label": "upsert + append"
-          },
-          "relationIndex": 2,
-          "label": "upsert + append",
-          "x": 924,
-          "y": 89,
-          "width": 82,
-          "height": 14,
-          "lx": 965,
-          "ly": 99
-        },
-        "from": [
-          998,
-          554
-        ],
-        "to": [
-          998,
-          52
-        ]
-      },
-      "supportedFixes": [
-        "if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel"
-      ]
-    },
-    {
-      "code": "composition/label-route-clearance",
-      "severity": "error",
-      "message": "[composition/label-route-clearance] showcase architecture label \"risk · needs\" on connections[10] id \"risk-handoff\" \"detect\" -> \"optimizer\" label \"risk · needs\" is 0px from connections[3] id \"forecast\" \"detect\" -> \"db\" label \"forecasts · risk\" segment 2 [998, 554] -> [998, 52] (label rect [936, 477, 68, 14]; minimum 4px) — if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel.",
-      "subject": {
-        "diagramType": "architecture",
-        "collection": "connections",
-        "index": 10,
-        "id": "risk-handoff",
-        "from": "detect",
-        "to": "optimizer"
-      },
-      "evidence": {
-        "label": "risk · needs",
-        "otherRelationship": {
-          "diagramType": "architecture",
-          "collection": "connections",
-          "index": 3,
-          "id": "forecast",
-          "from": "detect",
-          "to": "db"
-        },
-        "segmentIndex": 2,
-        "clearancePx": 0,
-        "minimumPx": 4,
-        "labelRect": {
-          "relation": {
-            "id": "risk-handoff",
-            "from": "detect",
-            "to": "optimizer",
-            "label": "risk · needs"
-          },
-          "relationIndex": 10,
-          "label": "risk · needs",
-          "x": 936.2,
-          "y": 477,
-          "width": 67.6,
-          "height": 14,
-          "lx": 970,
-          "ly": 487
-        },
-        "from": [
-          998,
-          554
-        ],
-        "to": [
-          998,
-          52
-        ]
-      },
-      "supportedFixes": [
-        "if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel"
-      ]
-    }
-  ],
+  "diagnostics": [],
   "evidence": {
     "receipt": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.finalize.json",
-    "summaryReceipt": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.finalize-summary.json"
+    "summaryReceipt": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.finalize-summary.json",
+    "browserCheckReceipt": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.browser-check.json"
   },
   "visualReview": "not-requested",
-  "failedStage": "validate",
-  "finishedAt": "2026-09-29T05:40:42.095Z",
-  "durationMs": 260,
+  "finishedAt": "2026-09-29T06:27:12.065Z",
+  "durationMs": 1512,
   "update": {
     "status": "current",
     "installedVersion": "3.0.1",

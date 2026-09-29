@@ -99,6 +99,15 @@ class StationNeed:
         return (self.destination_station_id, self.fuel_type)
 
 
+def physical_route_id(route_id: str) -> str:
+    """Strip the synthetic '::FUEL' option suffix (pipeline route×fuel expansion)."""
+    return route_id.split("::", 1)[0]
+
+
+def _physical_max_shipment(routes: list[RouteOption], physical_id: str) -> float:
+    return min(r.max_shipment for r in routes if physical_route_id(r.route_id) == physical_id)
+
+
 def liters_needed(need: StationNeed, horizon: int = HORIZON_TICKS) -> float:
     """P90 horizon demand + safety stock − inventory − incoming; ≥ 0."""
     horizon_p90 = need.p90_per_tick * horizon
@@ -186,9 +195,17 @@ def solve_lp(
         inflow = pulp.lpSum(v for k, v in x.items() if k[1] == n.key)
         m += inflow + u[n.key] >= liters_needed(n)
         m += inflow <= max(0.0, n.station_capacity - n.inventory)
-    # Route capacity
+    # Route capacity — aggregated per PHYSICAL route (synthetic "route::FUEL"
+    # options of the same route share one max_shipment pool).
+    seen_physical: set[str] = set()
     for r in routes:
-        m += pulp.lpSum(v for k, v in x.items() if k[0] == r.route_id) <= r.max_shipment
+        phys = physical_route_id(r.route_id)
+        if phys in seen_physical:
+            continue
+        seen_physical.add(phys)
+        m += pulp.lpSum(
+            v for k, v in x.items() if physical_route_id(k[0]) == phys
+        ) <= _physical_max_shipment(routes, phys)
 
     m.solve(pulp.PULP_CBC_CMD(msg=0))
     if pulp.LpStatus[m.status] != "Optimal":
@@ -228,13 +245,24 @@ def optimize(
         PlanItem(
             source_depot_id=route_by_id[route_id].source_depot_id,
             destination_station_id=need_by_key[key].destination_station_id,
-            route_id=route_id,
+            route_id=physical_route_id(route_id),  # real id — persisted + submitted
             fuel_type=need_by_key[key].fuel_type,
             quantity=round(liters, 1),
             transport_cost=round(liters * route_by_id[route_id].cost_per_liter, 2),
         )
         for (route_id, key), liters in plan.items()
     ]
+    # Same physical route + fuel may appear from multiple synthetic options —
+    # merge them so each (route, fuel) pair ships one combined allocation.
+    merged: dict[tuple[str, str, str, str], PlanItem] = {}
+    for i in items:
+        k = (i.source_depot_id, i.destination_station_id, i.route_id, i.fuel_type)
+        if k in merged:
+            merged[k].quantity = round(merged[k].quantity + i.quantity, 1)
+            merged[k].transport_cost = round(merged[k].transport_cost + i.transport_cost, 2)
+        else:
+            merged[k] = i
+    items = sorted(merged.values(), key=lambda i: (i.destination_station_id, -i.quantity))
     items.sort(key=lambda i: (i.destination_station_id, -i.quantity))
 
     allocated_per_need: dict[NeedKey, float] = {}
@@ -298,7 +326,7 @@ def heuristic_plan(
                 PlanItem(
                     source_depot_id=r.source_depot_id,
                     destination_station_id=n.destination_station_id,
-                    route_id=r.route_id,
+                    route_id=physical_route_id(r.route_id),  # real id — persisted + submitted
                     fuel_type=n.fuel_type,
                     quantity=room,
                     transport_cost=round(room * r.cost_per_liter, 2),

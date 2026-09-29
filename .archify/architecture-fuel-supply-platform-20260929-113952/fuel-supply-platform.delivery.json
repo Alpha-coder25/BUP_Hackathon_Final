@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "cb46b28d-2137-4249-8635-281f9e0dd442",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/candidate.json",
+  "output": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html",
+  "specification": {
+    "sha256": "289fe9f0181d0dce084b66991d5a8af2e69a1f4a5010bcae081d8887dc797d3c",
+    "bytes": 11960
+  },
+  "artifact": {
+    "sha256": "514767a7ed810405911d1bbf22caf49c95dfd17ea38c0c561db04492097c53cf",
+    "bytes": 776600
+  }
+}

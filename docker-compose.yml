@@ -34,7 +34,7 @@ services:
   simulator:
     image: asifmahmoud414/bup-fuel-supply-simulator:1.0.0
     environment:
-      SIMULATION_SPEED: 8
+      SIMULATION_SPEED: 1  # 1 tick/s — keeps recommendation cards humanly clickable
       TICK_MINUTES: 15
       SIMULATOR_START_MODE: running
     ports:

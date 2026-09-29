@@ -1,143 +1,36 @@
 {
   "schemaVersion": 1,
-  "ok": false,
+  "ok": true,
   "command": "finalize",
-  "status": "fail",
+  "status": "pass",
   "type": "architecture",
   "quality": "showcase",
   "specification": {
     "path": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/candidate.json",
-    "sha256": "2f00d8cd5d548276d0c3e553b8bcf74e9135f177723072d81cc7978b2a1e6949",
-    "bytes": 11862
+    "sha256": "289fe9f0181d0dce084b66991d5a8af2e69a1f4a5010bcae081d8887dc797d3c",
+    "bytes": 11960
   },
   "artifact": {
-    "path": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html"
+    "path": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html",
+    "sha256": "514767a7ed810405911d1bbf22caf49c95dfd17ea38c0c561db04492097c53cf",
+    "bytes": 776600
   },
   "gates": {
-    "validate": "fail",
-    "deliver": "not-run",
-    "check": "not-run",
-    "browser-check": "not-run"
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
   },
-  "failedStage": "validate",
-  "diagnostics": [
-    {
-      "code": "composition/label-route-clearance",
-      "severity": "error",
-      "message": "[composition/label-route-clearance] showcase architecture label \"upsert + append\" on connections[2] id \"persist\" \"collector\" -> \"db\" label \"upsert + append\" is 0px from connections[3] id \"forecast\" \"detect\" -> \"db\" label \"forecasts · risk\" segment 2 [998, 554] -> [998, 52] (label rect [924, 89, 82, 14]; minimum 4px) — if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel.",
-      "subject": {
-        "diagramType": "architecture",
-        "collection": "connections",
-        "index": 2,
-        "id": "persist",
-        "from": "collector",
-        "to": "db"
-      },
-      "evidence": {
-        "label": "upsert + append",
-        "otherRelationship": {
-          "diagramType": "architecture",
-          "collection": "connections",
-          "index": 3,
-          "id": "forecast",
-          "from": "detect",
-          "to": "db"
-        },
-        "segmentIndex": 2,
-        "clearancePx": 0,
-        "minimumPx": 4,
-        "labelRect": {
-          "relation": {
-            "id": "persist",
-            "from": "collector",
-            "to": "db",
-            "label": "upsert + append"
-          },
-          "relationIndex": 2,
-          "label": "upsert + append",
-          "x": 924,
-          "y": 89,
-          "width": 82,
-          "height": 14,
-          "lx": 965,
-          "ly": 99
-        },
-        "from": [
-          998,
-          554
-        ],
-        "to": [
-          998,
-          52
-        ]
-      },
-      "supportedFixes": [
-        "if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel"
-      ]
-    },
-    {
-      "code": "composition/label-route-clearance",
-      "severity": "error",
-      "message": "[composition/label-route-clearance] showcase architecture label \"risk · needs\" on connections[10] id \"risk-handoff\" \"detect\" -> \"optimizer\" label \"risk · needs\" is 0px from connections[3] id \"forecast\" \"detect\" -> \"db\" label \"forecasts · risk\" segment 2 [998, 554] -> [998, 52] (label rect [936, 477, 68, 14]; minimum 4px) — if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel.",
-      "subject": {
-        "diagramType": "architecture",
-        "collection": "connections",
-        "index": 10,
-        "id": "risk-handoff",
-        "from": "detect",
-        "to": "optimizer"
-      },
-      "evidence": {
-        "label": "risk · needs",
-        "otherRelationship": {
-          "diagramType": "architecture",
-          "collection": "connections",
-          "index": 3,
-          "id": "forecast",
-          "from": "detect",
-          "to": "db"
-        },
-        "segmentIndex": 2,
-        "clearancePx": 0,
-        "minimumPx": 4,
-        "labelRect": {
-          "relation": {
-            "id": "risk-handoff",
-            "from": "detect",
-            "to": "optimizer",
-            "label": "risk · needs"
-          },
-          "relationIndex": 10,
-          "label": "risk · needs",
-          "x": 936.2,
-          "y": 477,
-          "width": 67.6,
-          "height": 14,
-          "lx": 970,
-          "ly": 487
-        },
-        "from": [
-          998,
-          554
-        ],
-        "to": [
-          998,
-          52
-        ]
-      },
-      "supportedFixes": [
-        "if the authored route/fromSide/toSide are not required by the user, remove them so the renderer can re-plan; otherwise preserve that intent and adjust labelAt, labelDx, labelDy, or labelSegment; otherwise adjust the other relationship route/via/channel"
-      ]
-    }
-  ],
+  "diagnostics": [],
   "diagnosticSummary": {
-    "total": 2,
-    "shown": 2,
+    "total": 0,
+    "shown": 0,
     "truncated": false
   },
   "evidence": {
     "receipt": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.finalize.json",
-    "summaryReceipt": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.finalize-summary.json"
+    "summaryReceipt": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.finalize-summary.json",
+    "browserCheckReceipt": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.browser-check.json"
   },
   "update": {
     "status": "current",
@@ -150,11 +43,53 @@
     "noticeText": null
   },
   "visualReview": "not-requested",
-  "durationMs": 260,
-  "nextAction": {
-    "action": "edit-in-place",
-    "candidate": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/candidate.json",
-    "constraint": "Preserve all semantics and user-fixed geometry. Use references/architecture-layout-repair.md to choose a local repair or connected-scene reflow; edit the existing candidate.",
-    "then": "finalize-once"
+  "durationMs": 1512,
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "routesOverSuggestedStretch": 1
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [],
+      "detours": [
+        {
+          "relationship": {
+            "id": "write-back",
+            "from": "api",
+            "to": "simclient",
+            "label": "POST /v1/allocations · idempotency-keyed",
+            "collectionIndex": 9,
+            "artifactIndex": 10
+          },
+          "bends": 2,
+          "stretch": 2.041,
+          "directCorridorBlockers": [
+            {
+              "id": "collector",
+              "label": "Collector",
+              "box": [
+                674,
+                140,
+                200,
+                66
+              ]
+            },
+            {
+              "id": "db",
+              "label": "PostgreSQL 16",
+              "box": [
+                972,
+                140,
+                200,
+                66
+              ]
+            }
+          ]
+        }
+      ],
+      "truncated": false
+    },
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
   }
 }
