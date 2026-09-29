@@ -14,12 +14,14 @@ Simulator API (docker, :8000)
         ├── [Anomaly]     z-score spike / inventory-drop / shipment-delay rules
         └── [Optimizer]   PuLP LP: min transport cost + 1000×unmet, open routes only
         ▼
-FastAPI backend (:8080)  ──►  Next.js/React dashboard (:3000)
+FastAPI backend (:8080)  ──►  SvelteKit dashboard (:3000)
         │                        Overview · Alerts · Recommendations · History · Health
         └── /health, /metrics (prometheus-fastapi-instrumentator), JSON logs
 ```
 
 One repo: `backend/`, `web/`, `mock_simulator/`. Redis for queue/cache.
+
+**Frontend tooling:** Svelte MCP server (`@sveltejs/mcp`, wired in `.mcp.json`) plus the `svelte-code-writer` / `svelte-core-bestpractices` skills (`.agents/skills/`). Every `.svelte` / `.svelte.ts` file must pass the MCP `svelte-autofixer` before commit.
 
 ## 2. Stack
 
@@ -30,7 +32,7 @@ One repo: `backend/`, `web/`, `mock_simulator/`. Redis for queue/cache.
 | Anomaly | stdlib statistics (z-score) | no dependency |
 | Optimizer | PuLP + CBC | small LP, exact solve |
 | DB | PostgreSQL 16 | time-series snapshots, JSONB |
-| Web | Next.js/React | operator dashboard |
+| Web | SvelteKit 2 + Svelte 5 (runes) | operator dashboard — small bundles, fine-grained reactivity, SSR + file-based routing out of the box |
 | Deploy | Docker Compose (api, web, db, redis) | one-command reproducibility |
 | GenAI | LLM API keyed via `.env`, template fallback | explanations, not chatbot |
 
