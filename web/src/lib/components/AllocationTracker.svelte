@@ -33,28 +33,28 @@
 	.alloc {
 		display: flex;
 		align-items: center;
-		gap: 0.6rem;
-		font-size: 0.78rem;
-		padding: 0.3rem 0;
-		border-top: 1px dashed var(--line);
+		gap: var(--space-6);
+		font-size: var(--text-md);
+		padding: var(--space-3) 0;
+		border-top: var(--space-1) dashed var(--border-muted);
 	}
 	.key {
-		color: var(--muted);
-		font-family: ui-monospace, monospace;
-		font-size: 0.7rem;
+		color: var(--text-tertiary);
+		font-family: var(--font-mono);
+		font-size: var(--text-sm);
 	}
 	.steps {
 		display: flex;
-		gap: 0.35rem;
+		gap: var(--space-3);
 		align-items: center;
 	}
 	.step {
-		color: var(--muted);
+		color: var(--text-tertiary);
 		letter-spacing: 0.03em;
-		font-size: 0.7rem;
+		font-size: var(--text-sm);
 	}
 	.step.done {
-		color: var(--ok);
+		color: var(--color-ok);
 		font-weight: 600;
 	}
 	.step.failed {
@@ -62,10 +62,10 @@
 		font-weight: 600;
 	}
 	.arrow {
-		color: var(--line);
+		color: var(--text-secondary);
 	}
 	.fail {
 		color: var(--sev-critical);
-		font-size: 0.72rem;
+		font-size: var(--text-sm);
 	}
 </style>

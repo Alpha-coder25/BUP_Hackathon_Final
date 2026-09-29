@@ -75,7 +75,7 @@
 						<td>{a.route_id}</td>
 						<td>{a.fuel_type}</td>
 						<td class="num">{fmtLiters(a.quantity)}</td>
-						<td class="status" style:--c={a.status === 'ARRIVED' ? 'var(--ok)' : a.status === 'FAILED' || a.status === 'CANCELLED' ? 'var(--sev-critical)' : 'var(--sev-medium)'}>
+						<td class="status" style:--c={a.status === 'ARRIVED' ? 'var(--color-ok)' : a.status === 'FAILED' || a.status === 'CANCELLED' ? 'var(--sev-critical)' : 'var(--sev-medium)'}>
 							{a.status}
 						</td>
 						<td class="fail">{a.failure_reason ?? ''}</td>
@@ -100,7 +100,7 @@
 					<tr>
 						<td>{new Date(d.decided_at).toLocaleString()}</td>
 						<td>{d.operator}</td>
-						<td class="status" style:--c={d.action === 'APPROVED' ? 'var(--ok)' : d.action === 'REJECTED' ? 'var(--sev-critical)' : 'var(--sev-medium)'}>
+						<td class="status" style:--c={d.action === 'APPROVED' ? 'var(--color-ok)' : d.action === 'REJECTED' ? 'var(--sev-critical)' : 'var(--sev-medium)'}>
 							{d.action}
 						</td>
 						<td>#{d.recommendation_id}</td>
@@ -114,52 +114,71 @@
 
 <style>
 	h1 {
-		font-size: 1.25rem;
-		margin: 0 0 0.75rem;
+		font-size: var(--text-2xl);
+		margin: 0 0 var(--space-7);
 	}
 	h2 {
-		font-size: 0.95rem;
-		color: var(--muted);
-		margin: 1.25rem 0 0.5rem;
+		font-size: var(--text-lg);
+		color: var(--text-tertiary);
+		margin: var(--space-8) 0 var(--space-5);
 	}
 	.filters {
 		display: flex;
-		gap: 0.6rem;
+		gap: var(--space-6);
 		align-items: center;
-		margin-bottom: 0.75rem;
+		margin-bottom: var(--space-7);
 	}
 	select,
 	input {
-		background: var(--panel);
-		color: var(--text);
-		border: 1px solid var(--line);
-		border-radius: 6px;
-		padding: 0.3rem 0.5rem;
-		font-size: 0.82rem;
+		background: var(--surface-raised);
+		color: var(--text-primary);
+		border: var(--space-1) solid var(--border-muted);
+		border-radius: var(--radius-sm);
+		padding: var(--space-3) var(--space-5);
+		font-size: var(--text-md);
+		font-family: inherit;
+		transition: border-color var(--motion-instant) ease;
+	}
+	select:hover,
+	input:hover {
+		border-color: var(--text-tertiary);
 	}
 	.clear {
-		background: none;
-		border: 1px solid var(--line);
-		border-radius: 6px;
-		color: var(--muted);
+		background: transparent;
+		border: var(--space-1) solid var(--border-muted);
+		border-radius: var(--radius-sm);
+		color: var(--text-tertiary);
 		cursor: pointer;
-		padding: 0.3rem 0.6rem;
-		font-size: 0.78rem;
+		padding: var(--space-3) var(--space-6);
+		font-size: var(--text-md);
+		font-family: inherit;
+		transition: border-color var(--motion-instant) ease, background var(--motion-instant) ease;
+	}
+	.clear:hover:not(:disabled) {
+		border-color: var(--text-tertiary);
+		background: var(--surface-strong);
+	}
+	.clear:active:not(:disabled) {
+		background: var(--surface-muted);
+	}
+	.clear:disabled {
+		opacity: 0.5;
+		cursor: default;
 	}
 	table {
 		width: 100%;
 		border-collapse: collapse;
-		font-size: 0.82rem;
+		font-size: var(--text-md);
 	}
 	th,
 	td {
 		text-align: left;
-		padding: 0.35rem 0.55rem;
-		border-bottom: 1px solid var(--line);
+		padding: var(--space-3) var(--space-5);
+		border-bottom: var(--space-1) solid var(--border-muted);
 	}
 	th {
-		color: var(--muted);
-		font-size: 0.72rem;
+		color: var(--text-tertiary);
+		font-size: var(--text-sm);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
@@ -168,14 +187,14 @@
 	}
 	.status {
 		font-weight: 600;
-		font-size: 0.75rem;
+		font-size: var(--text-md);
 		color: var(--c);
 	}
 	.fail {
-		color: var(--muted);
-		font-size: 0.78rem;
+		color: var(--text-secondary);
+		font-size: var(--text-md);
 	}
 	.empty {
-		color: var(--muted);
+		color: var(--text-secondary);
 	}
 </style>

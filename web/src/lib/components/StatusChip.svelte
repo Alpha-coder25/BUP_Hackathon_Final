@@ -10,19 +10,19 @@
 	);
 </script>
 
-<span class="chip" style:--c={kind === 'ok' ? 'var(--ok)' : kind === 'warn' ? 'var(--sev-medium)' : 'var(--sev-critical)'}>
+<span class="chip" style:--c={kind === 'ok' ? 'var(--color-ok)' : kind === 'warn' ? 'var(--sev-medium)' : 'var(--sev-critical)'}>
 	{status}
 </span>
 
 <style>
 	.chip {
 		display: inline-block;
-		font-size: 0.7rem;
+		font-size: var(--text-sm);
 		font-weight: 600;
 		letter-spacing: 0.04em;
-		padding: 0.1rem 0.5rem;
-		border-radius: 999px;
-		border: 1px solid var(--c);
+		padding: var(--space-1) var(--space-5);
+		border-radius: var(--radius-sm);
+		border: var(--space-1) solid var(--c);
 		color: var(--c);
 	}
 </style>

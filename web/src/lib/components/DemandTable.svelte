@@ -28,18 +28,18 @@
 	table {
 		width: 100%;
 		border-collapse: collapse;
-		font-size: 0.82rem;
+		font-size: var(--text-md);
 	}
 	th,
 	td {
 		text-align: left;
-		padding: 0.3rem 0.5rem;
-		border-bottom: 1px solid var(--line);
+		padding: var(--space-3) var(--space-5);
+		border-bottom: var(--space-1) solid var(--border-muted);
 		font-variant-numeric: tabular-nums;
 	}
 	th {
-		color: var(--muted);
-		font-size: 0.72rem;
+		color: var(--text-tertiary);
+		font-size: var(--text-sm);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}

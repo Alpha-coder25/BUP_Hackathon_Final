@@ -4,7 +4,7 @@
 	let { components }: { components: ComponentHealth[] } = $props();
 
 	const color = (s: ComponentHealth['status']) =>
-		s === 'HEALTHY' ? 'var(--ok)' : s === 'DEGRADED' ? 'var(--sev-medium)' : 'var(--sev-critical)';
+		s === 'HEALTHY' ? 'var(--color-ok)' : s === 'DEGRADED' ? 'var(--sev-medium)' : 'var(--sev-critical)';
 </script>
 
 <table>
@@ -29,17 +29,17 @@
 	table {
 		width: 100%;
 		border-collapse: collapse;
-		font-size: 0.85rem;
+		font-size: var(--text-lg);
 	}
 	th,
 	td {
 		text-align: left;
-		padding: 0.4rem 0.6rem;
-		border-bottom: 1px solid var(--line);
+		padding: var(--space-4) var(--space-6);
+		border-bottom: var(--space-1) solid var(--border-muted);
 	}
 	th {
-		color: var(--muted);
-		font-size: 0.72rem;
+		color: var(--text-tertiary);
+		font-size: var(--text-sm);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
@@ -47,17 +47,17 @@
 		font-variant-numeric: tabular-nums;
 	}
 	.detail {
-		color: var(--muted);
-		font-size: 0.78rem;
+		color: var(--text-tertiary);
+		font-size: var(--text-md);
 	}
 	.badge {
 		display: inline-block;
-		font-size: 0.7rem;
+		font-size: var(--text-sm);
 		font-weight: 600;
 		letter-spacing: 0.04em;
-		padding: 0.1rem 0.5rem;
-		border-radius: 999px;
-		border: 1px solid var(--c);
+		padding: var(--space-1) var(--space-5);
+		border-radius: var(--radius-sm);
+		border: var(--space-1) solid var(--c);
 		color: var(--c);
 	}
 </style>

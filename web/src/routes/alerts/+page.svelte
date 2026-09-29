@@ -19,15 +19,15 @@
 
 <style>
 	h1 {
-		font-size: 1.25rem;
-		margin: 0 0 1rem;
+		font-size: var(--text-2xl);
+		margin: 0 0 var(--space-8);
 	}
 	.feed {
 		display: grid;
-		gap: 0.75rem;
+		gap: var(--space-8);
 		max-width: 720px;
 	}
 	.empty {
-		color: var(--muted);
+		color: var(--text-secondary);
 	}
 </style>

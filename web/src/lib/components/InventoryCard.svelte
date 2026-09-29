@@ -20,7 +20,7 @@
 		<div class="row">
 			<span class="fuel">{fuel}</span>
 			<div class="bar" style:--pct="{pct}%">
-				<span class="fill" style:background={pct < 20 ? 'var(--sev-high)' : pct < 40 ? 'var(--sev-medium)' : 'var(--ok)'}></span>
+				<span class="fill" style:background={pct < 20 ? 'var(--sev-high)' : pct < 40 ? 'var(--sev-medium)' : 'var(--color-ok)'}></span>
 			</div>
 			<span class="num">{fmtLiters(inv)}</span>
 		</div>
@@ -29,30 +29,33 @@
 
 <style>
 	.card {
-		border: 1px solid var(--line);
-		border-radius: 8px;
-		padding: 0.75rem 1rem;
-		background: var(--panel);
+		border: var(--space-1) solid var(--border-muted);
+		border-radius: var(--radius-sm);
+		padding: var(--space-7) var(--space-8);
+		background: var(--surface-raised);
+		box-shadow: var(--shadow-1);
 	}
 	h3 {
-		margin: 0 0 0.5rem;
-		font-size: 0.95rem;
+		margin: 0 0 var(--space-5);
+		font-size: var(--text-lg);
+		font-weight: 600;
+		color: var(--text-inverse);
 	}
 	.row {
 		display: grid;
 		grid-template-columns: 4.5rem 1fr 5.5rem;
-		gap: 0.5rem;
+		gap: var(--space-5);
 		align-items: center;
-		margin: 0.25rem 0;
-		font-size: 0.8rem;
+		margin: var(--space-2) 0;
+		font-size: var(--text-md);
 	}
 	.fuel {
-		color: var(--muted);
+		color: var(--text-secondary);
 	}
 	.bar {
-		height: 6px;
-		border-radius: 3px;
-		background: var(--line);
+		height: var(--space-4);
+		border-radius: var(--radius-xs);
+		background: var(--surface-strong);
 		overflow: hidden;
 	}
 	.fill {

@@ -46,33 +46,40 @@
 
 <style>
 	h1 {
-		font-size: 1.25rem;
-		margin: 0 0 0.75rem;
+		font-size: var(--text-2xl);
+		margin: 0 0 var(--space-7);
 	}
 	.tabs {
 		display: flex;
-		gap: 0.5rem;
-		margin-bottom: 0.9rem;
+		gap: var(--space-5);
+		margin-bottom: var(--space-8);
 	}
 	.tabs button {
-		background: none;
-		border: 1px solid var(--line);
-		border-radius: 999px;
-		color: var(--muted);
-		padding: 0.25rem 0.9rem;
-		font-size: 0.8rem;
+		background: transparent;
+		border: var(--space-1) solid var(--border-muted);
+		border-radius: var(--radius-sm);
+		color: var(--text-tertiary);
+		padding: var(--space-3) var(--space-8);
+		font-size: var(--text-md);
+		font-family: inherit;
 		cursor: pointer;
+		transition: border-color var(--motion-instant) ease, background var(--motion-instant) ease, color var(--motion-instant) ease;
+	}
+	.tabs button:hover {
+		color: var(--text-primary);
+		border-color: var(--text-tertiary);
 	}
 	.tabs button.active {
-		color: var(--text);
-		border-color: var(--text);
+		color: var(--text-inverse);
+		border-color: var(--border-default);
+		background: var(--surface-strong);
 	}
 	.fallback {
-		margin-top: 0.75rem;
+		margin-top: var(--space-7);
 		color: var(--sev-medium);
-		font-size: 0.82rem;
+		font-size: var(--text-md);
 	}
 	.empty {
-		color: var(--muted);
+		color: var(--text-secondary);
 	}
 </style>

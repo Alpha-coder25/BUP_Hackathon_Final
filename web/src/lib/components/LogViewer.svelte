@@ -4,7 +4,7 @@
 	let { logs }: { logs: LogEntry[] } = $props();
 
 	const levelColor = (l: LogEntry['level']) =>
-		l === 'ERROR' ? 'var(--sev-critical)' : l === 'WARN' ? 'var(--sev-medium)' : l === 'DEBUG' ? 'var(--muted)' : 'var(--text)';
+		l === 'ERROR' ? 'var(--sev-critical)' : l === 'WARN' ? 'var(--sev-medium)' : l === 'DEBUG' ? 'var(--text-tertiary)' : 'var(--text-primary)';
 </script>
 
 {#if logs.length === 0}
@@ -24,22 +24,25 @@
 
 <style>
 	.logs {
-		font-family: ui-monospace, 'Cascadia Code', Menlo, monospace;
-		font-size: 0.75rem;
-		border: 1px solid var(--line);
-		border-radius: 8px;
-		background: var(--panel);
-		padding: 0.5rem 0;
+		font-family: var(--font-mono);
+		font-size: var(--text-md);
+		border: var(--space-1) solid var(--border-muted);
+		border-radius: var(--radius-sm);
+		background: var(--surface-muted);
+		padding: var(--space-5) 0;
 		max-height: 420px;
 		overflow-y: auto;
 	}
 	.line {
 		display: flex;
-		gap: 0.7rem;
-		padding: 0.15rem 0.75rem;
+		gap: var(--space-7);
+		padding: var(--space-2) var(--space-7);
+	}
+	.line:hover {
+		background: var(--surface-strong);
 	}
 	.ts {
-		color: var(--muted);
+		color: var(--text-tertiary);
 		flex-shrink: 0;
 	}
 	.level {
@@ -50,13 +53,13 @@
 	.comp {
 		width: 6rem;
 		flex-shrink: 0;
-		color: var(--muted);
+		color: var(--text-secondary);
 	}
 	.msg {
 		white-space: pre-wrap;
 		word-break: break-word;
 	}
 	.empty {
-		color: var(--muted);
+		color: var(--text-secondary);
 	}
 </style>

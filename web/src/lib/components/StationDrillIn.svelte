@@ -37,31 +37,35 @@
 
 <style>
 	aside {
-		border: 1px solid var(--line);
-		border-radius: 8px;
-		padding: 1rem;
-		background: var(--panel);
+		border: var(--space-1) solid var(--border-muted);
+		border-radius: var(--radius-sm);
+		padding: var(--space-8);
+		background: var(--surface-raised);
+		box-shadow: var(--shadow-1);
 	}
 	h2 {
-		margin: 0 0 0.75rem;
-		font-size: 1rem;
+		margin: 0 0 var(--space-6);
+		font-size: var(--text-xl);
+		font-weight: 600;
+		color: var(--text-inverse);
 	}
 	.grid {
 		display: grid;
-		gap: 0.5rem;
+		gap: var(--space-5);
 	}
 	.label {
 		display: block;
-		font-size: 0.72rem;
+		font-size: var(--text-sm);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
-		color: var(--muted);
+		color: var(--text-tertiary);
 	}
 	.value {
 		font-variant-numeric: tabular-nums;
+		font-size: var(--text-lg);
 	}
 	.empty {
-		color: var(--muted);
-		font-size: 0.85rem;
+		color: var(--text-secondary);
+		font-size: var(--text-lg);
 	}
 </style>

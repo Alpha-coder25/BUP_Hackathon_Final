@@ -51,19 +51,20 @@
 
 <style>
 	.card {
-		border: 1px solid var(--line);
+		border: var(--space-1) solid var(--border-muted);
 		border-left: 3px solid var(--sev);
-		border-radius: 8px;
-		padding: 0.75rem 1rem;
-		background: var(--panel);
+		border-radius: var(--radius-sm);
+		padding: var(--space-7) var(--space-8);
+		background: var(--surface-raised);
+		box-shadow: var(--shadow-1);
 		display: grid;
-		gap: 0.4rem;
+		gap: var(--space-4);
 	}
 	header {
 		display: flex;
 		align-items: baseline;
-		gap: 0.6rem;
-		font-size: 0.78rem;
+		gap: var(--space-6);
+		font-size: var(--text-md);
 	}
 	.sev {
 		font-weight: 700;
@@ -72,64 +73,71 @@
 	}
 	.cause {
 		text-transform: uppercase;
-		font-size: 0.68rem;
-		color: var(--muted);
-		border: 1px solid var(--line);
-		border-radius: 999px;
-		padding: 0.05rem 0.45rem;
+		font-size: var(--text-xs);
+		color: var(--text-secondary);
+		border: var(--space-1) solid var(--border-muted);
+		border-radius: var(--radius-sm);
+		padding: var(--space-1) var(--space-4);
 	}
 	.where {
 		font-weight: 600;
 	}
 	.tick {
 		margin-left: auto;
-		color: var(--muted);
+		color: var(--text-secondary);
 		font-variant-numeric: tabular-nums;
 	}
 	.message {
 		margin: 0;
-		font-size: 0.9rem;
+		font-size: var(--text-lg);
 	}
 	.explanation {
 		margin: 0;
-		font-size: 0.8rem;
-		color: var(--muted);
-		border-top: 1px dashed var(--line);
-		padding-top: 0.4rem;
+		font-size: var(--text-md);
+		color: var(--text-tertiary);
+		border-top: var(--space-1) dashed var(--border-muted);
+		padding-top: var(--space-4);
 	}
 	footer {
 		display: flex;
 		align-items: center;
-		gap: 0.9rem;
-		font-size: 0.8rem;
+		gap: var(--space-7);
+		font-size: var(--text-md);
 	}
 	button {
-		background: none;
-		border: 1px solid var(--line);
-		border-radius: 6px;
-		color: var(--text);
-		padding: 0.2rem 0.7rem;
+		background: transparent;
+		border: var(--space-1) solid var(--border-muted);
+		border-radius: var(--radius-sm);
+		color: var(--text-primary);
+		padding: var(--space-3) var(--space-7);
 		cursor: pointer;
-		font-size: 0.8rem;
+		font-size: var(--text-md);
+		font-family: inherit;
+		transition: border-color var(--motion-instant) ease, background var(--motion-instant) ease;
 	}
 	button:hover:not(:disabled) {
-		border-color: var(--text);
+		border-color: var(--text-tertiary);
+		background: var(--surface-strong);
+	}
+	button:active:not(:disabled) {
+		background: var(--surface-muted);
 	}
 	button:disabled {
 		opacity: 0.5;
 		cursor: default;
 	}
 	.acked {
-		color: var(--muted);
+		color: var(--text-secondary);
 		letter-spacing: 0.04em;
-		font-size: 0.72rem;
+		font-size: var(--text-sm);
 	}
 	footer a {
 		margin-left: auto;
-		color: var(--muted);
+		color: var(--text-tertiary);
 		text-decoration: none;
+		border-radius: var(--radius-xs);
 	}
 	footer a:hover {
-		color: var(--text);
+		color: var(--text-primary);
 	}
 </style>

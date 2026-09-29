@@ -68,7 +68,7 @@ async function main() {
 		},
 		stdio: 'inherit'
 	});
-	await waitFor(WEB, ['Fuel Ops']);
+	await waitFor(WEB, ['FUELINTEL']);
 
 	try {
 		// 1. Shell + SSR paint of live data on every screen

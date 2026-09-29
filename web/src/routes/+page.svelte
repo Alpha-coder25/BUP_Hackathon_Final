@@ -77,53 +77,56 @@
 
 <style>
 	h1 {
-		font-size: 1.25rem;
-		margin: 0 0 1rem;
+		font-size: var(--text-2xl);
+		margin: 0 0 var(--space-8);
 	}
 	h2 {
-		font-size: 0.95rem;
-		color: var(--muted);
-		margin: 1.25rem 0 0.5rem;
+		font-size: var(--text-lg);
+		color: var(--text-tertiary);
+		margin: var(--space-8) 0 var(--space-5);
 	}
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-		gap: 0.75rem;
+		gap: var(--space-8);
 	}
 	.cell {
 		position: relative;
 	}
 	.chiprow {
-		margin-bottom: -0.5rem;
+		margin-bottom: calc(-1 * var(--space-5));
 		text-align: right;
 	}
 	button.station {
 		all: unset;
 		cursor: pointer;
 		display: block;
-		border-radius: 8px;
+		border-radius: var(--radius-sm);
+		transition: outline-color var(--motion-fast) ease;
 	}
-	button.station:hover,
+	button.station:hover {
+		outline: var(--space-2) solid var(--text-tertiary);
+	}
 	button.station.active {
-		outline: 2px solid var(--sev-medium);
+		outline: var(--space-2) solid var(--sev-medium);
 	}
 	.arrivals {
 		list-style: none;
 		padding: 0;
 		margin: 0;
-		font-size: 0.85rem;
+		font-size: var(--text-lg);
 	}
 	.arrivals li {
-		padding: 0.3rem 0;
-		border-bottom: 1px solid var(--line);
+		padding: var(--space-3) 0;
+		border-bottom: var(--space-1) solid var(--border-muted);
 	}
 	.delayed {
 		color: var(--sev-medium);
 		font-weight: 600;
-		font-size: 0.7rem;
-		margin-left: 0.4rem;
+		font-size: var(--text-sm);
+		margin-left: var(--space-4);
 	}
 	.empty {
-		color: var(--muted);
+		color: var(--text-secondary);
 	}
 </style>
