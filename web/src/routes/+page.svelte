@@ -5,6 +5,8 @@
 	import StatusChip from '$lib/components/StatusChip.svelte';
 	import DemandTable from '$lib/components/DemandTable.svelte';
 	import StationDrillIn from '$lib/components/StationDrillIn.svelte';
+	import MetricsStrip from '$lib/components/MetricsStrip.svelte';
+	import ActiveEvents from '$lib/components/ActiveEvents.svelte';
 
 	let selectedStationId = $state<string | null>(null);
 
@@ -19,6 +21,10 @@
 {#if !sim.state}
 	<p class="empty">Waiting for backend state… (is the API on :8080 up?)</p>
 {:else}
+	<MetricsStrip metrics={sim.state.metrics} />
+
+	<ActiveEvents events={sim.state.events} />
+
 	<section>
 		<h2>Depots</h2>
 		<div class="grid">
