@@ -1,0 +1,232 @@
+erDiagram
+    REGIONS {
+        string id PK
+        string name
+        float demand_factor
+    }
+    DEPOTS {
+        string id PK
+        string region_id FK
+        string name
+        string status "OPEN or CONSTRAINED"
+        int dispatch_capacity_per_tick
+        jsonb capacity "per fuel"
+    }
+    STATIONS {
+        string id PK
+        string region_id FK
+        string name
+        string demand_profile
+        string status "OPEN or OUTAGE"
+        float demand_multiplier
+        jsonb capacity "per fuel"
+    }
+    ROUTES {
+        string id PK
+        string source_depot_id FK
+        string destination_station_id FK
+        int transit_ticks
+        int max_shipment
+        string status "AVAILABLE or DISRUPTED"
+    }
+    DEPOT_INVENTORY_SNAPSHOTS {
+        bigint id PK
+        string depot_id FK
+        int tick
+        timestamp sim_time
+        string fuel_type
+        float quantity
+    }
+    STATION_INVENTORY_SNAPSHOTS {
+        bigint id PK
+        string station_id FK
+        int tick
+        timestamp sim_time
+        string fuel_type
+        float quantity
+    }
+    DEMAND_OBSERVATIONS {
+        bigint id PK
+        string station_id FK
+        string fuel_type
+        int tick
+        float demand_liters
+        float served_liters
+        float unmet_liters
+    }
+    SUPPLY_ARRIVALS {
+        string id PK
+        string depot_id FK
+        string fuel_type
+        float quantity
+        int planned_tick
+        int actual_tick
+        string status "SCHEDULED DELAYED ARRIVED"
+    }
+    SIM_EVENTS {
+        int id PK
+        string type
+        int start_tick
+        int end_tick
+        string status "SCHEDULED ACTIVE RESOLVED"
+        jsonb parameters
+    }
+    MODEL_VERSIONS {
+        int id PK
+        string name
+        string kind "forecast or anomaly or planner"
+        string version
+        jsonb params
+        float backtest_mape
+        boolean is_active
+        timestamp created_at
+    }
+    FORECASTS {
+        bigint id PK
+        string station_id FK
+        int model_version_id FK
+        string fuel_type
+        int generated_at_tick
+        int target_tick
+        float predicted_liters
+        float lower_bound
+        float upper_bound
+    }
+    RISK_ASSESSMENTS {
+        bigint id PK
+        string station_id FK
+        int model_version_id FK
+        string fuel_type
+        int tick
+        float hours_to_stockout
+        float stockout_probability
+        string severity "LOW MEDIUM HIGH CRITICAL"
+        float confidence
+        jsonb signals
+    }
+    ALERTS {
+        bigint id PK
+        bigint risk_assessment_id FK
+        string type "shortage anomaly disruption system"
+        string severity
+        string station_id FK
+        string fuel_type
+        string message
+        string status "OPEN ACKED RESOLVED"
+        int created_tick
+        int acknowledged_by FK
+        timestamp resolved_at
+    }
+    RECOMMENDATIONS {
+        bigint id PK
+        bigint risk_assessment_id FK
+        string policy "heuristic or optimizer or fallback"
+        int tick
+        string status "PROPOSED APPROVED REJECTED EXPIRED"
+        float confidence
+        float risk_before
+        float risk_after
+        jsonb explanation
+        jsonb alternatives
+        int expires_tick
+    }
+    RECOMMENDATION_ITEMS {
+        bigint id PK
+        bigint recommendation_id FK
+        string depot_id FK
+        string station_id FK
+        string route_id FK
+        string fuel_type
+        float quantity
+    }
+    OPERATORS {
+        int id PK
+        string name
+        string role "viewer or operator or admin"
+        string password_hash
+    }
+    DECISIONS {
+        bigint id PK
+        bigint recommendation_id FK
+        int operator_id FK
+        string action "APPROVED REJECTED MODIFIED AUTO"
+        string note
+        timestamp decided_at
+    }
+    ALLOCATIONS {
+        bigint id PK
+        int sim_allocation_id "simulator id"
+        string idempotency_key UK
+        bigint recommendation_item_id FK
+        string depot_id FK
+        string station_id FK
+        string route_id FK
+        string fuel_type
+        float quantity
+        string status "PENDING IN_TRANSIT ARRIVED FAILED CANCELLED"
+        int created_tick
+        int departure_tick
+        int expected_arrival_tick
+        int actual_arrival_tick
+        string failure_reason
+    }
+    SERVICE_HEALTH_CHECKS {
+        bigint id PK
+        string component "backend db simulator forecaster planner"
+        string status "HEALTHY DEGRADED DOWN"
+        int latency_ms
+        string detail
+        timestamp checked_at
+    }
+    FALLBACK_EVENTS {
+        bigint id PK
+        string component
+        string reason
+        string fallback_policy
+        timestamp started_at
+        timestamp ended_at
+    }
+    BENCHMARK_RUNS {
+        int id PK
+        string policy
+        int seed
+        string scenario
+        int ticks
+        float service_level
+        float unmet_liters
+        int allocation_failures
+        timestamp started_at
+    }
+    AUDIT_LOG {
+        bigint id PK
+        int operator_id FK
+        string action
+        string entity_type
+        string entity_id
+        jsonb payload
+        timestamp created_at
+    }
+
+    REGIONS ||--o{ DEPOTS : contains
+    REGIONS ||--o{ STATIONS : contains
+    DEPOTS ||--o{ ROUTES : source
+    STATIONS ||--o{ ROUTES : destination
+    DEPOTS ||--o{ DEPOT_INVENTORY_SNAPSHOTS : tracked_by
+    STATIONS ||--o{ STATION_INVENTORY_SNAPSHOTS : tracked_by
+    STATIONS ||--o{ DEMAND_OBSERVATIONS : observes
+    DEPOTS ||--o{ SUPPLY_ARRIVALS : receives
+    STATIONS ||--o{ FORECASTS : forecasted_for
+    MODEL_VERSIONS ||--o{ FORECASTS : produced
+    MODEL_VERSIONS ||--o{ RISK_ASSESSMENTS : used_by
+    STATIONS ||--o{ RISK_ASSESSMENTS : assessed
+    RISK_ASSESSMENTS ||--o{ ALERTS : raises
+    RISK_ASSESSMENTS ||--o{ RECOMMENDATIONS : triggers
+    RECOMMENDATIONS ||--|{ RECOMMENDATION_ITEMS : contains
+    RECOMMENDATIONS ||--o{ DECISIONS : reviewed_in
+    OPERATORS ||--o{ DECISIONS : makes
+    OPERATORS ||--o{ ALERTS : acknowledges
+    OPERATORS ||--o{ AUDIT_LOG : performs
+    RECOMMENDATION_ITEMS ||--o| ALLOCATIONS : executed_as
+    DEPOTS ||--o{ ALLOCATIONS : ships
+    STATIONS ||--o{ ALLOCATIONS : receives
+    ROUTES ||--o{ ALLOCATIONS : carries
