@@ -34,7 +34,7 @@ How the platform is structured. Stack decisions: `TRD.md`. Data model: `ERD.md`.
                                │ REST + SSE
                                ▼
                 ┌───────────────────────────────┐
-                │    Next.js dashboard (:3000)  │  Overview · Alerts ·
+                │    SvelteKit dashboard (:3000)  │  Overview · Alerts ·
                 │                               │  Recommendations · History · Health
                 └───────────────────────────────┘
 ```
@@ -52,7 +52,7 @@ How the platform is structured. Stack decisions: `TRD.md`. Data model: `ERD.md`.
 | Backend API | FastAPI | State, alerts, decision loop, history, health, metrics | 8080 |
 | Database | PostgreSQL 16 | Time-series snapshots, JSONB intelligence + decision rows | 5432 |
 | Cache/queue | Redis | Tick queue, last-good cache hot path | 6379 |
-| Dashboard | Next.js/React | Operator UI, SSE live refresh | 3000 |
+| Dashboard | SvelteKit 2 + Svelte 5 | Operator UI, SSE live refresh | 3000 |
 | Mock simulator | FastAPI stub | Fixed-JSON endpoints for offline dev/tests | 8000 (dev) |
 
 ## 3. Data flow (per tick)
@@ -90,7 +90,7 @@ Single repo, one command:
 
 ```
 backend/           FastAPI + collector + intelligence modules
-web/               Next.js dashboard
+web/               SvelteKit dashboard
 mock_simulator/    offline stub of /v1/*
 docker-compose.yml api · web · db (postgres:16) · redis
 ```

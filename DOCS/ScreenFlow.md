@@ -1,6 +1,6 @@
 # Screen Flow — Operator Dashboard
 
-Five screens (Next.js/React). Global top bar: sim tick/clock, stale-data banner, health badge, operator menu.
+Five screens (SvelteKit/Svelte 5). Global top bar: sim tick/clock, stale-data banner, health badge, operator menu.
 
 ```
                     ┌────────────┐
