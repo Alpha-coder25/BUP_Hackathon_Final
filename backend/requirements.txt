@@ -1,0 +1,14 @@
+# Backend dependencies — Fuel Supply Intelligence & Resilience Platform
+# Stack: DOCS/TRD.md §2
+fastapi>=0.115
+uvicorn[standard]>=0.30
+httpx>=0.27
+sqlalchemy>=2.0
+psycopg[binary]>=3.2
+redis>=5.0
+numpy>=2.0
+pandas>=2.2
+scikit-learn>=1.5
+pulp>=2.9,<4  # 4.0 (Rust core) changed the LpVariable API
+prometheus-fastapi-instrumentator>=7.0
+python-dotenv>=1.0
