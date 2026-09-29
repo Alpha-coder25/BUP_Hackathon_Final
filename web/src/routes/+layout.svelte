@@ -10,11 +10,19 @@ import { resolve } from '$app/paths';
 let { children, data }: { children: Snippet; data: LayoutData } = $props();
 
 	// Seed the store from the server load, then take over with live refresh.
+	// Health polls every 5s at the shell level so the top-bar badge is live on
+	// every screen (build order step 4).
 	$effect(() => {
 		if (data?.state) sim.state = data.state;
 		if (data?.alerts) sim.alerts = data.alerts;
 		if (data?.health) sim.health = data.health;
-		return startLiveRefresh();
+
+		const healthPoll = setInterval(() => sim.refreshHealth().catch(() => {}), 5_000);
+		const stopRefresh = startLiveRefresh();
+		return () => {
+			stopRefresh();
+			clearInterval(healthPoll);
+		};
 	});
 
 	type RoutePath = Parameters<typeof resolve>[0];

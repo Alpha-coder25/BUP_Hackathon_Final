@@ -5,14 +5,11 @@
 
 	let tab = $state<'components' | 'logs'>('components');
 
-	// Health probes every 5s per BackendImplementation §8; logs refresh alongside.
+	// Health polls at the layout level; the Logs tab only refetches while viewed.
 	$effect(() => {
-		const tick = () => {
-			sim.refreshHealth().catch(() => {});
-			sim.refreshLogs().catch(() => {});
-		};
-		tick();
-		const poll = setInterval(tick, 5_000);
+		if (tab !== 'logs') return;
+		sim.refreshLogs().catch(() => {});
+		const poll = setInterval(() => sim.refreshLogs().catch(() => {}), 5_000);
 		return () => clearInterval(poll);
 	});
 
