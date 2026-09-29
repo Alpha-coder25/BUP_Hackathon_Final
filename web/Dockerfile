@@ -13,9 +13,9 @@ RUN npm run build
 FROM node:20 AS runner
 WORKDIR /app
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1
-RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
+# node:20 (Debian) ships a `node` user already
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-USER nextjs
+USER node
 EXPOSE 3000
 CMD ["node", "server.js"]
