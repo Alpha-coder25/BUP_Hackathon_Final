@@ -116,6 +116,7 @@ _state = {
     "sim_time": "2026-01-01T00:00:00+00:00",
     "served": 0.0,
     "unmet": 0.0,
+    "history": [],          # real per-tick demand observations (guide §4.11)
     "seq": 1,
 }
 _subscribers: list[tuple[asyncio.AbstractEventLoop, asyncio.Queue]] = []
@@ -160,14 +161,37 @@ def _advance_tick() -> None:
         day_fraction = TICK_MINUTES / (24 * 60)
 
         # Demand consumes station inventory; unmet when empty.
+        spike = _state.get("spike")
+        spike_active = bool(spike and spike.get("ticks_left", 0) > 0)
         for s in STATIONS:
             profile = DEMAND_PROFILES[s["demand_profile"]]
             for fuel in FUELS:
-                want = profile[fuel] * day_fraction * (1 + _rng.uniform(-0.1, 0.1)) * s["demand_multiplier"]
+                mult = 1.0
+                if (
+                    spike_active
+                    and (not spike["station_id"] or spike["station_id"] == s["id"])
+                    and (not spike["fuel"] or spike["fuel"] == fuel)
+                ):
+                    mult = float(spike["multiplier"])
+                want = profile[fuel] * day_fraction * (1 + _rng.uniform(-0.1, 0.1)) * s["demand_multiplier"] * mult
                 served = min(want, s["inventory"][fuel])
                 s["inventory"][fuel] = round(s["inventory"][fuel] - served, 1)
                 _state["served"] += served
                 _state["unmet"] += want - served
+                # Record the real observation — demand-history must reflect what
+                # actually happened (incl. spikes/unmet), not synthetic noise.
+                _state["history"].append({
+                    "id": 0, "station_id": s["id"], "fuel_type": fuel, "tick": tick,
+                    "sim_time": _state["sim_time"],
+                    "demand_liters": round(want, 3), "served_liters": round(served, 3),
+                    "unmet_liters": round(want - served, 3),
+                })
+        if spike_active:
+            spike["ticks_left"] -= 1  # once per tick, not per station
+            if spike["ticks_left"] <= 0:
+                _state["spike"] = None
+        if len(_state["history"]) > 6000:  # ~500 ticks × 12 rows — bounded memory
+            del _state["history"][: len(_state["history"]) - 6000]
 
         # Supply arrivals land.
         for a in SUPPLY_ARRIVALS:
@@ -300,19 +324,9 @@ def metrics():
 def demand_history(station_id: str = "", limit: int = 200):
     _guard()
     limit = max(1, min(limit, 2000))
-    rows, day_fraction = [], TICK_MINUTES / (24 * 60)
-    for s in STATIONS:
-        if station_id and s["id"] != station_id:
-            continue
-        profile = DEMAND_PROFILES[s["demand_profile"]]
-        for fuel in FUELS:
-            for t in range(max(0, _state["tick"] - limit // len(FUELS)), _state["tick"] + 1):
-                base = profile[fuel] * day_fraction
-                rows.append({
-                    "id": len(rows) + 1, "station_id": s["id"], "fuel_type": fuel, "tick": t,
-                    "sim_time": _iso_sim_time(t), "demand_liters": round(base * (1 + _rng.uniform(-0.1, 0.1)), 3),
-                    "served_liters": round(base, 3), "unmet_liters": 0.0,
-                })
+    rows = [r for r in _state["history"] if not station_id or r["station_id"] == station_id]
+    for i, r in enumerate(rows):
+        r["id"] = i + 1
     return JSONResponse(rows[-limit:], headers=_stale_headers())
 
 
@@ -444,16 +458,28 @@ def inject_fault(body: dict):
         "until": time.monotonic() + float(body.get("duration_seconds", 60)),
         "params": body.get("parameters", {}),
     }
-    return {"status": "injected", "type": kind}
-
-
-@app.post("/__mock/reset")
+    return {"status": "injected", "type": kind}@app.post("/__mock/reset")
 def reset():
-    _state["tick"] = 0
-    _state["allocations"].clear()
-    _state["idempotency"].clear()
-    _state["faults"].clear()
-    return {"status": "reset"}
+	_state["tick"] = 0
+	_state["allocations"].clear()
+	_state["idempotency"].clear()
+	_state["faults"].clear()
+	return {"status": "reset"}
+
+
+@app.post("/__mock/spike")
+def inject_spike(body: dict):
+	"""Mock-only: one-tick demand multiplier — fires a real z>3 demand-spike
+	anomaly in the backend's detector (TRD F4). Body: {"station_id": str,
+	"fuel": str, "multiplier": float (default 12)}; defaults to all
+	stations×fuels when unscoped. Deterministic worlds never trip the spike
+	rule on their own — demos/tests use this."""
+	station_id = body.get("station_id")
+	fuel = body.get("fuel")
+	mult = float(body.get("multiplier", 12))
+	ticks = int(body.get("duration_ticks", 90))
+	_state["spike"] = {"station_id": station_id, "fuel": fuel, "multiplier": mult, "ticks_left": ticks}
+	return {"status": "scheduled", "spike": _state["spike"]}
 
 
 def main() -> None:

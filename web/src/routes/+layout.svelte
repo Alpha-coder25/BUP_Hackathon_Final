@@ -24,6 +24,10 @@ let { children, data }: { children: Snippet; data: LayoutData } = $props();
 	sim.allocations = data?.history?.allocations ?? sim.allocations;
 	/* svelte-ignore state_referenced_locally */
 	sim.health = data?.health ?? sim.health;
+	/* svelte-ignore state_referenced_locally */
+	sim.forecasts = data?.forecasts ?? sim.forecasts;
+	/* svelte-ignore state_referenced_locally */
+	sim.demandRows = data?.demand ?? sim.demandRows;
 
 	$effect(() => {
 		const healthPoll = setInterval(() => sim.refreshHealth().catch(() => {}), 5_000);

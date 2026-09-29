@@ -32,7 +32,26 @@ _SessionLocal: sessionmaker | None = None
 def get_engine():
     global _engine
     if _engine is None:
-        _engine = create_engine(DB_URL, future=True)
+        if DB_URL.startswith("sqlite"):
+            from sqlalchemy import event
+
+            # WAL + busy_timeout: the collector thread(s), the pipeline persist,
+            # and request-handler reads share one SQLite file. In default journal
+            # mode a long read (e.g. /api/state snapshot joins) blocks the
+            # pipeline's write past the 5s default and every persist fails with
+            # "database is locked". WAL readers never block writers; the busy
+            # timeout absorbs concurrent-writer collisions between the drivers.
+            _engine = create_engine(DB_URL, future=True, connect_args={"timeout": 15})
+
+            @event.listens_for(_engine, "connect")
+            def _sqlite_pragmas(dbapi_conn, _record):  # noqa: ANN001
+                cur = dbapi_conn.cursor()
+                cur.execute("PRAGMA journal_mode=WAL")
+                cur.execute("PRAGMA busy_timeout=15000")
+                cur.execute("PRAGMA synchronous=NORMAL")
+                cur.close()
+        else:
+            _engine = create_engine(DB_URL, future=True)
     return _engine
 
 

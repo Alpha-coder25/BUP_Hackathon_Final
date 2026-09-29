@@ -5,12 +5,14 @@ export const load: LayoutLoad = async ({ fetch }) => {
 	// First-paint data for the whole dashboard: every screen seeds from the shell
 	// load; SSE owns updates afterwards. Individual failures must not block the
 	// shell — the dashboard degrades per-panel.
-	const [state, alerts, recs, history, health] = await Promise.allSettled([
+	const [state, alerts, recs, history, health, forecasts, demand] = await Promise.allSettled([
 		api.state(),
 		api.alerts(),
 		api.recommendations(),
 		api.history(),
-		api.health()
+		api.health(),
+		api.forecasts(),
+		api.demand()
 	]);
 
 	return {
@@ -18,6 +20,8 @@ export const load: LayoutLoad = async ({ fetch }) => {
 		alerts: alerts.status === 'fulfilled' ? alerts.value : [],
 		recommendations: recs.status === 'fulfilled' ? recs.value : [],
 		history: history.status === 'fulfilled' ? history.value : { decisions: [], allocations: [] },
-		health: health.status === 'fulfilled' ? health.value : null
+		health: health.status === 'fulfilled' ? health.value : null,
+		forecasts: forecasts.status === 'fulfilled' ? forecasts.value : [],
+		demand: demand.status === 'fulfilled' ? demand.value : []
 	};
 };

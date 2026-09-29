@@ -88,7 +88,11 @@ class SimulatorClient:
         raise last_error  # type: ignore[misc] — nothing cached and all retries failed
 
     def _fetch_once(self, path: str) -> tuple[Any, bool]:
-        with httpx.Client(base_url=self.base_url, timeout=TIMEOUT_SECONDS, transport=self.transport) as client:
+        # trust_env=False: never route simulator traffic through proxy env vars
+        # (developer machines with system proxies black-hole localhost connects).
+        with httpx.Client(
+            base_url=self.base_url, timeout=TIMEOUT_SECONDS, transport=self.transport, trust_env=False
+        ) as client:
             response = client.get(path)
         if response.status_code >= 400:
             raise httpx.HTTPStatusError(
@@ -107,7 +111,26 @@ class SimulatorClient:
 
     # Typed accessors (all route through `fetch`; none hold business logic)
     def health(self) -> tuple[dict, bool]:
-        return self.fetch("/v1/health")  # bypasses faults — liveness probe
+        """Liveness probe — single attempt, short timeout, proxy env ignored.
+
+        /v1/health bypasses simulator faults, so the probe must never inherit
+        fetch()'s retry/backoff (a dead simulator would hang /health for the
+        full retry budget and stall the dashboard's health polling).
+        """
+        with httpx.Client(
+            base_url=self.base_url,
+            timeout=min(2.0, TIMEOUT_SECONDS),
+            transport=self.transport,
+            trust_env=False,
+        ) as client:
+            response = client.get("/v1/health")
+        if response.status_code >= 400:
+            raise httpx.HTTPStatusError(
+                f"{response.status_code} on /v1/health",
+                request=response.request,
+                response=response,
+            )
+        return response.json(), False
 
     def instance(self) -> tuple[dict, bool]:
         return self.fetch("/v1/instance")

@@ -8,7 +8,9 @@ import {
 	type Alert,
 	type Allocation,
 	type Decision,
+	type DemandRow,
 	type Depot,
+	type Forecast,
 	type HealthReport,
 	type LogEntry,
 	type Recommendation,
@@ -112,5 +114,7 @@ export const api = {
 		};
 	},
 	health: async () => normalizeHealth(await request('/health', undefined, 4000)),
-	logs: async () => (await request<LogEntry[]>('/api/logs')) ?? []
+	logs: async () => (await request<LogEntry[]>('/api/logs')) ?? [],
+	forecasts: async () => (await request<Forecast[]>('/api/forecasts')) ?? [],
+	demand: async () => (await request<DemandRow[]>('/api/demand')) ?? []
 };

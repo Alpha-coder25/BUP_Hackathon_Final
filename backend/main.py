@@ -228,6 +228,58 @@ def state() -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Forecasts — latest-tick forecast + risk per station×fuel (UI drill-in)
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/forecasts")
+def forecasts_endpoint() -> list[dict]:
+    from sqlalchemy import text
+
+    with get_engine().connect() as conn:
+        latest_tick = conn.execute(
+            text("SELECT COALESCE(MAX(generated_at_tick), 0) FROM forecasts")
+        ).scalar_one()
+        rows = conn.execute(text(
+            "SELECT f.station_id, f.fuel_type, f.generated_at_tick, f.target_tick, "
+            "f.predicted_liters, f.lower_bound, f.upper_bound, "
+            "r.hours_to_stockout, r.stockout_probability, r.severity, r.confidence "
+            "FROM forecasts f JOIN risk_assessments r "
+            "  ON r.station_id = f.station_id AND r.fuel_type = f.fuel_type "
+            " AND r.tick = f.generated_at_tick "
+            "WHERE f.generated_at_tick = :t"
+        ), {"t": latest_tick}).mappings().all()
+    return [dict(r) for r in rows]
+
+
+# ---------------------------------------------------------------------------
+# Demand — latest observed demand/served/unmet rows (Overview demand table)
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/demand")
+def demand_endpoint() -> list[dict]:
+    from sqlalchemy import text
+
+    with get_engine().connect() as conn:
+        # Use the latest tick with FULL per-tick coverage. The collector reads
+        # each station's history at a slightly different moment while the world
+        # keeps ticking, so the newest tick can be partially filled — a bare
+        # MAX(tick) would render one station's rows as if it were the world.
+        latest_tick = conn.execute(text(
+            "SELECT COALESCE(MAX(tick), 0) FROM ("
+            "  SELECT tick FROM demand_observations GROUP BY tick"
+            "  HAVING COUNT(*) >= (SELECT COUNT(*) FROM stations) * 3"
+            ")"
+        )).scalar_one()
+        rows = conn.execute(text(
+            "SELECT station_id, fuel_type, demand_liters, served_liters, unmet_liters "
+            "FROM demand_observations WHERE tick = :t ORDER BY station_id, fuel_type"
+        ), {"t": latest_tick}).mappings().all()
+    return [dict(r) for r in rows]
+
+
+# ---------------------------------------------------------------------------
 # Alerts — Alert[]
 # ---------------------------------------------------------------------------
 
@@ -267,12 +319,12 @@ def ack_alert(alert_id: int) -> dict:
             raise HTTPException(404, detail=f"Alert {alert_id} not found")
         conn.execute(text("UPDATE alerts SET status = 'ACKED' WHERE id = :id"), {"id": alert_id})
         op_id = conn.execute(text(
-            "INSERT INTO operators (name, role) VALUES ('ops-console', 'operator') "
+            "INSERT INTO operators (name, role, password_hash) VALUES ('ops-console', 'operator', '') "
             "ON CONFLICT (name) DO UPDATE SET name=EXCLUDED.name RETURNING id"
         )).scalar_one()
         conn.execute(text(
-            "INSERT INTO audit_log (operator_id, action, entity_type, entity_id, payload) "
-            "VALUES (:op, 'alert.acked', 'alert', :id, '{}')"
+            "INSERT INTO audit_log (operator_id, action, entity_type, entity_id, payload, created_at) "
+            "VALUES (:op, 'alert.acked', 'alert', :id, '{}', CURRENT_TIMESTAMP)"
         ), {"op": op_id, "id": str(alert_id)})
     from .events import publish
 

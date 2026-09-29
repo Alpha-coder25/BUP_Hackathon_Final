@@ -14,6 +14,13 @@
 	const depots = $derived(sim.state?.depots ?? []);
 	const arrivals = $derived(sim.state?.arrivals ?? []);
 	const selected = $derived(stations.find((s) => s.id === selectedStationId) ?? null);
+
+	// Latest-tick forecasts (worst severity first) for the station drill-in.
+	const SEV_ORDER: Record<string, number> = { CRITICAL: 3, HIGH: 2, MEDIUM: 1, LOW: 0 };
+	const stationForecast = (stationId: string) =>
+		sim.forecasts
+			.filter((f) => f.station_id === stationId)
+			.sort((a, b) => (SEV_ORDER[b.severity] ?? -1) - (SEV_ORDER[a.severity] ?? -1))[0] ?? null;
 </script>
 
 <h1>Overview</h1>
@@ -58,13 +65,12 @@
 	</section>
 
 	{#if selected}
-		<StationDrillIn station={selected} forecast={null} />
+		<StationDrillIn station={selected} forecast={stationForecast(selected.id)} />
 	{/if}
 
 	<section>
 		<h2>Regional demand (latest tick)</h2>
-		<!-- demand rows land in /api/state once the collector publishes them -->
-		<DemandTable rows={[]} />
+		<DemandTable rows={sim.demandRows} />
 	</section>
 
 	<section>

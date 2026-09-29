@@ -18,9 +18,10 @@ import numpy as np
 log = logging.getLogger(__name__)
 
 SPIKE_Z = 3.0
+RECENT_WINDOW = 24        # ticks excluded from the baseline (the "current" zone)
+BASELINE_WINDOW = 72      # ticks of prior history used as the μ/σ baseline
 DROP_RATIO = 0.4          # actual drop > 40% of expected draw → suspicious
 DELAY_BUFFER_TICKS = 1    # arrival late by > 1 tick → delay alert
-RECENT_WINDOW = 24        # ticks of history for μ/σ
 
 
 @dataclass
@@ -34,12 +35,22 @@ class AnomalyAlert:
 
 
 def demand_spike(history_liters: list[float], latest: float, z: float = SPIKE_Z) -> bool:
-    """|latest − μ|/σ > 3 over the recent window (μ/σ exclude the latest point)."""
-    window = [v for v in history_liters[-RECENT_WINDOW:] if v is not None]
-    if len(window) < 5:
-        return False  # not enough history to call a spike
-    mu = float(np.mean(window))
-    sigma = float(np.std(window)) or 1.0
+    """|latest − μ|/σ > 3, where μ/σ come from the baseline BEFORE the recent
+    window (not including the latest point).
+
+    Testing against a pre-recent baseline catches both short impulses and
+    sustained level shifts (a 12-tick demand_spike event would otherwise pull
+    the window's μ/σ toward the spike and hide itself). |abs| also flags a
+    demand collapse-to-zero, which is equally anomalous.
+    """
+    if len(history_liters) < RECENT_WINDOW + 5:
+        return False  # not enough history to establish a baseline
+    baseline = [v for v in history_liters[:-RECENT_WINDOW] if v is not None]
+    baseline = baseline[-BASELINE_WINDOW:]
+    if len(baseline) < 5:
+        return False
+    mu = float(np.mean(baseline))
+    sigma = float(np.std(baseline)) or 1.0
     return abs(latest - mu) / sigma > z
 
 
