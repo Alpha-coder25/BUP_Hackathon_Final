@@ -1,13 +1,19 @@
 // Typed API client for our FastAPI backend (:8080) — TRD §6.
 // Never talks to the simulator directly (SystemArchitecture §4 boundary).
 
-import { PUBLIC_API_BASE } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import { ApiError, type Alert, type Allocation, type Decision, type HealthReport, type LogEntry, type Recommendation, type SimState } from './types';
+
+// Dynamic public env: runtime-configurable (docker-compose sets PUBLIC_API_BASE
+// per environment — no rebuild needed). Falls back to the local default.
+function apiBase() {
+	return env.PUBLIC_API_BASE ?? 'http://localhost:8080';
+}
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
 	let res: Response;
 	try {
-		res = await fetch(`${PUBLIC_API_BASE}${path}`, init);
+		res = await fetch(`${apiBase()}${path}`, init);
 	} catch {
 		throw new ApiError(0, 'UNREACHABLE', 'Backend API unreachable');
 	}

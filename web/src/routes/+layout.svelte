@@ -4,19 +4,27 @@
 import type { LayoutData } from './$types';
 	import { sim } from '$lib/state/sim.svelte';
 	import { startLiveRefresh } from '$lib/api/sse';
-import { PUBLIC_API_BASE } from '$env/static/public';
 import { resolve } from '$app/paths';
 
 let { children, data }: { children: Snippet; data: LayoutData } = $props();
 
-	// Seed the store from the server load, then take over with live refresh.
-	// Health polls every 5s at the shell level so the top-bar badge is live on
-	// every screen (build order step 4).
-	$effect(() => {
-		if (data?.state) sim.state = data.state;
-		if (data?.alerts) sim.alerts = data.alerts;
-		if (data?.health) sim.health = data.health;
+	// Seed the store synchronously from the server load (works during SSR — no
+	// $effect gating), then attach live refresh + health polling as client effects.
+	// Deliberately reads the initial load value only — SSE owns updates afterwards.
+	/* svelte-ignore state_referenced_locally */
+	sim.state = data?.state ?? sim.state;
+	/* svelte-ignore state_referenced_locally */
+	sim.alerts = data?.alerts ?? sim.alerts;
+	/* svelte-ignore state_referenced_locally */
+	sim.recommendations = data?.recommendations ?? sim.recommendations;
+	/* svelte-ignore state_referenced_locally */
+	sim.decisions = data?.history?.decisions ?? sim.decisions;
+	/* svelte-ignore state_referenced_locally */
+	sim.allocations = data?.history?.allocations ?? sim.allocations;
+	/* svelte-ignore state_referenced_locally */
+	sim.health = data?.health ?? sim.health;
 
+	$effect(() => {
 		const healthPoll = setInterval(() => sim.refreshHealth().catch(() => {}), 5_000);
 		const stopRefresh = startLiveRefresh();
 		return () => {
