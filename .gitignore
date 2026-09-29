@@ -12,3 +12,7 @@ node_modules/
 out/
 .DS_Store
 *.log
+
+# SQLite runtime artifacts
+backend/*.db-shm
+backend/*.db-wal
