@@ -1,0 +1,75 @@
+# Fuel Supply Intelligence & Resilience Platform — full stack
+# One command: docker compose up
+#
+# Simulator: organizer image, pinned. Baked scenario (baseline), no preloaded events.
+# Our services only ever talk to the simulator's /v1/* — never /admin/* (guide §2).
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: fuel
+      POSTGRES_PASSWORD: change_me
+      POSTGRES_DB: fuel
+    ports:
+      - "5433:5432"  # host dev access; a local Postgres often owns 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fuel -d fuel"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7
+    ports:
+      - "6380:6379"  # host dev access; a local Redis often owns 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  simulator:
+    image: asifmahmoud414/bup-fuel-supply-simulator:1.0.0
+    environment:
+      SIMULATION_SPEED: 8
+      TICK_MINUTES: 15
+      SIMULATOR_START_MODE: running
+    ports:
+      - "8000:8000"
+
+  api:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    env_file: .env
+    environment:
+      DB_URL: postgresql+psycopg://fuel:change_me@db:5432/fuel
+      REDIS_URL: redis://redis:6379/0
+      SIM_URL: http://simulator:8000
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      simulator:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  web:
+    build: ./web
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
