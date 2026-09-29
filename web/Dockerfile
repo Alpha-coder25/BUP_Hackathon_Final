@@ -1,4 +1,7 @@
-# SvelteKit dashboard (adapter-node) — Fuel Supply Intelligence & Resilience Platform
+# SvelteKit (adapter-node) build for the Fuel Ops dashboard.
+# Runtime config: PUBLIC_API_BASE (backend base URL) is read from the
+# environment at server start — no rebuild needed per environment.
+
 FROM node:20 AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -8,15 +11,14 @@ FROM node:20 AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# PUBLIC_API_BASE is baked at build time (vite $env/static/public)
-ARG PUBLIC_API_BASE=http://localhost:8080
-ENV PUBLIC_API_BASE=${PUBLIC_API_BASE}
 RUN npm run build
 
 FROM node:20 AS runner
 WORKDIR /app
-ENV NODE_ENV=production PORT=3000 ORIGIN=http://localhost:3000
+ENV NODE_ENV=production
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
+USER node
 EXPOSE 3000
-CMD ["node", "build/index.js"]
+CMD ["node", "build"]

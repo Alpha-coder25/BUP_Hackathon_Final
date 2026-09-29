@@ -161,21 +161,33 @@ export interface Decision {
 	decided_at: string;
 }
 
-// ---- API payloads (TRD §6) ----
+// ---- API payloads (TRD §6, real backend shapes) ----
 
 export interface SimState {
+	/** absent in backend Phase 0/1 — normalized to false */
 	is_stale: boolean;
-	tick: number;
-	sim_time: string;
+	/** absent until the collector publishes it — normalized to null */
+	tick: number | null;
 	depots: Depot[];
 	stations: Station[];
 	routes: Route[];
 	regions: Region[];
+	/** backend key: supply_arrivals (normalized to arrivals for the UI) */
 	arrivals: SupplyArrival[];
 	events: SimEvent[];
-	metrics: SimMetrics;
+	/** absent until the pipeline publishes it */
+	metrics: SimMetrics | null;
 }
 
+/** Raw /health body: components is a dict keyed by component name (main.py). */
+export interface RawHealthReport {
+	components: Record<
+		string,
+		{ status: 'HEALTHY' | 'DEGRADED' | 'DOWN'; latency_ms?: number; detail?: unknown }
+	>;
+}
+
+/** Normalized health the UI consumes (computed from RawHealthReport). */
 export interface HealthReport {
 	/** overall = worst component status */
 	status: 'HEALTHY' | 'DEGRADED' | 'DOWN';

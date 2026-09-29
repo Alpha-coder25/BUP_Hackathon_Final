@@ -97,4 +97,9 @@ Maps to Phases 3–4 of `Implementation.md`:
 - Run the code through the Svelte MCP `svelte-autofixer` tool before commit (it's wired in `.mcp.json`; the `svelte-code-writer` skill drives it).
 - `sv check` (svelte-check) clean; runes mode only — no legacy `export let`, `on:click`, `class:`, `$:`.
 
+**Mock backend & smoke test (no backend required):**
+- `node web/mock-backend.mjs` — zero-dependency mock of the full API contract (state, alerts, recommendations + approve/reject, history, health, logs, SSE `/api/stream` with `allocation.status_changed` progression PENDING → IN_TRANSIT → ARRIVED). Test-only controls: `POST /__mock__/stale` (toggle stale banner), `/__mock__/tick`, `/__mock__/reset`.
+- `node web/smoke-test.mjs` — starts mock + built app, asserts SSR paint on all screens, the approve loop, stale-banner toggling, and double-approve 409. 23 checks.
+- **Switching to the real backend:** no app-code changes. `PUBLIC_API_BASE` is runtime env (`$env/dynamic/public`) — point it at the FastAPI on :8080 and the app talks to it. The mock is opt-in tooling only; delete both scripts once the real contract is verified.
+
 **Done when:** approve loop completes on screen (PENDING → ARRIVED), stale banner shows when the simulator is killed, health badges flip live.

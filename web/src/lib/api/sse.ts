@@ -3,11 +3,11 @@
 // EventSource reconnects on its own; this helper adds the 30 s polling fallback
 // while the stream is down and a full refetch on reconnect.
 
-import { PUBLIC_API_BASE } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import { sim } from '$lib/state/sim.svelte';
 
 export function startLiveRefresh(): () => void {
-	const es = new EventSource(`${PUBLIC_API_BASE}/api/stream`);
+	const es = new EventSource(`${env.PUBLIC_API_BASE ?? 'http://localhost:8080'}/api/stream`);
 	let poll: ReturnType<typeof setInterval> | null = null;
 
 	function refreshAffected(events: string[]) {
