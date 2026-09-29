@@ -15,6 +15,7 @@ export function startLiveRefresh(): () => void {
 			sim.refreshState().catch(() => {});
 			sim.refreshAlerts().catch(() => {});
 			sim.refreshRecommendations().catch(() => {});
+			sim.refreshAllocations().catch(() => {});
 		}, 30_000);
 	}
 
@@ -29,7 +30,8 @@ export function startLiveRefresh(): () => void {
 		await Promise.allSettled([
 			sim.refreshState(),
 			sim.refreshAlerts(),
-			sim.refreshRecommendations()
+			sim.refreshRecommendations(),
+			sim.refreshAllocations()
 		]);
 	}
 

@@ -140,6 +140,7 @@ export interface Recommendation {
 
 export interface Allocation {
 	id: number;
+	recommendation_id: number | null;
 	idempotency_key: string;
 	source_depot_id: string;
 	destination_station_id: string;
