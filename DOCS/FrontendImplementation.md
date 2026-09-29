@@ -27,6 +27,7 @@ web/
         InventoryCard.svelte  StatusChip.svelte  DemandTable.svelte
         AlertCard.svelte  RecommendationCard.svelte  AllocationTracker.svelte
         RiskBadge.svelte  ConfidenceBar.svelte  LogViewer.svelte  HealthTable.svelte
+        (RiskBadge/ConfidenceBar: if they stay one-liners, inline them as `{#snippet}` instead of files)
   svelte.config.js
   vite.config.ts
 ```
@@ -36,10 +37,10 @@ web/
 - **One typed API client** (`lib/api/client.ts`) against our backend only — never the simulator. Mirrors `TRD.md` §6:
   `GET /api/state`, `GET /api/alerts`, `GET /api/recommendations`, `POST /api/recommendations/{id}/approve|reject`, `GET /api/history`, `GET /health`.
   Base URL from `PUBLIC_API_BASE` env (`svelte.config` / `.env`), default `http://localhost:8080`.
-- **Live refresh:** SSE from the backend (`lib/api/sse.ts`). Every event → re-GET the affected endpoint (same invariant as the collector: events are hints, not data). Reconnect loop with exponential backoff; on disconnect fall back to 30 s polling; full refetch on reconnect. `stream_disconnect`-style 503s are retried with backoff, not treated as fatal.
+- **Live refresh:** SSE from the backend (`lib/api/sse.ts`). Every event → re-GET the affected endpoint (same invariant as the collector: events are hints, not data). `EventSource` reconnects on its own; on repeated failure fall back to 30 s polling; full refetch on reconnect.
 - **State model (Svelte 5 runes):**
-  - Shared state lives in `lib/state/sim.svelte.ts` — a class with `$state` fields (depots, stations, routes, alerts, recommendations, `is_stale`, connection status). Exported via module singleton; components import and read it directly. Reactivity is fine-grained — no store libraries, no context needed for 5 screens.
-  - API responses are large and only ever reassigned → hold them in `$state.raw` fields (per `svelte-core-bestpractices`: proxy overhead buys nothing here). Replace by assignment on refetch.
+  - Shared state lives in `lib/state/sim.svelte.ts` — a class with `$state` fields (depots, stations, routes, alerts, recommendations, `is_stale`). Exported via module singleton; components import and read it directly. Reactivity is fine-grained — no store libraries, no context needed for 5 screens.
+  - API responses are large and only ever reassigned → plain `$state` fields, replaced by assignment on refetch.
   - Derived values (filtered alert lists, overdue recommendations, count of CRITICAL alerts) use `$derived` — never `$effect` + assignment.
   - Initial render: SvelteKit universal `+page.ts` `load` functions fetch first paint data server-side; hydration takes over from the SSE/refresh loop.
 - **Stale propagation:** `is_stale` from `/api/state` lives in the shared state class; `+layout.svelte` renders the global banner from it.
@@ -81,7 +82,7 @@ web/
 - Severity: LOW gray · MEDIUM amber · HIGH orange · CRITICAL red.
 - Risk display: % + hours-to-stockout always paired. Risk deltas shown as `72% → 19%`.
 - Policy tags: optimizer (green) · heuristic (amber) · fallback (red).
-- Implementation: CSS custom properties in `+layout.svelte` (`--sev-low`, `--sev-medium`, …), passed into children via `style:--color`-style props; component `<style>` blocks stay scoped (no global CSS framework). Dark operator-friendly theme.
+- Implementation: CSS custom properties on `+layout.svelte` (`--sev-low`, `--sev-medium`, …) — they inherit into every component; component `<style>` blocks stay scoped (no global CSS framework). Dark operator-friendly theme.
 
 ## 6. Build order & checks
 
