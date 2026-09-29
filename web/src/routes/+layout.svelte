@@ -13,6 +13,7 @@ let { children, data }: { children: Snippet; data: LayoutData } = $props();
 	$effect(() => {
 		if (data?.state) sim.state = data.state;
 		if (data?.alerts) sim.alerts = data.alerts;
+		if (data?.health) sim.health = data.health;
 		return startLiveRefresh();
 	});
 
@@ -26,8 +27,12 @@ const nav: { href: RoutePath; label: string }[] = [
 		{ href: '/health', label: 'Health' }
 	];
 
+	// Top-bar badge from real /health — DOWN/DEGRADED/unknown all break the green.
 	const healthClass = $derived(
-		sim.state ? 'ok' : 'down' // placeholder until health polling lands (build order step 4)
+		sim.health === null ? 'down' : sim.health.status === 'HEALTHY' ? 'ok' : 'warn'
+	);
+	const healthLabel = $derived(
+		sim.health === null ? 'No signal' : sim.health.status.charAt(0) + sim.health.status.slice(1).toLowerCase()
 	);
 </script>
 
@@ -40,8 +45,8 @@ const nav: { href: RoutePath; label: string }[] = [
 			{/each}
 		</nav>
 		<span class="tick" title="Simulation tick">T{sim.state?.tick ?? '—'}</span>
-		<a class="badge" href={resolve('/health')} style:--c={healthClass === 'ok' ? 'var(--ok)' : 'var(--sev-critical)'}>
-			{healthClass === 'ok' ? 'Healthy' : 'Down'}
+		<a class="badge" href={resolve('/health')} style:--c={healthClass === 'ok' ? 'var(--ok)' : healthClass === 'warn' ? 'var(--sev-medium)' : 'var(--sev-critical)'}>
+			{healthLabel}
 		</a>
 	</header>
 

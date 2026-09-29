@@ -2,13 +2,16 @@
 // FrontendImplementation §2). API responses are replaced by assignment on refetch.
 
 import { api } from '$lib/api/client';
-import type { Allocation, Alert, Recommendation, SimState } from '$lib/api/types';
+import type { Allocation, Alert, Decision, HealthReport, LogEntry, Recommendation, SimState } from '$lib/api/types';
 
 class SimStateStore {
 	state = $state<SimState | null>(null);
 	alerts = $state<Alert[]>([]);
 	recommendations = $state<Recommendation[]>([]);
 	allocations = $state<Allocation[]>([]);
+	decisions = $state<Decision[]>([]);
+	health = $state<HealthReport | null>(null);
+	logs = $state<LogEntry[]>([]);
 
 	/** true while the backend reports stale simulator data — drives the global banner */
 	isStale = $derived(this.state?.is_stale ?? false);
@@ -32,7 +35,21 @@ class SimStateStore {
 
 	refreshAllocations = async () => {
 		const history = await api.history();
-		this.allocations = history.allocations as Allocation[];
+		this.allocations = history.allocations;
+	};
+
+	refreshHistory = async () => {
+		const history = await api.history();
+		this.decisions = history.decisions;
+		this.allocations = history.allocations;
+	};
+
+	refreshHealth = async () => {
+		this.health = await api.health();
+	};
+
+	refreshLogs = async () => {
+		this.logs = await api.logs();
 	};
 
 	async approve(id: number) {

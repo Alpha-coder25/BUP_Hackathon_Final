@@ -177,11 +177,26 @@ export interface SimState {
 }
 
 export interface HealthReport {
-	api: 'HEALTHY' | 'DEGRADED' | 'DOWN';
-	db: 'HEALTHY' | 'DEGRADED' | 'DOWN';
-	simulator: 'HEALTHY' | 'DEGRADED' | 'DOWN';
-	forecaster: 'HEALTHY' | 'DEGRADED' | 'DOWN';
-	planner: 'HEALTHY' | 'DEGRADED' | 'DOWN';
+	/** overall = worst component status */
+	status: 'HEALTHY' | 'DEGRADED' | 'DOWN';
+	components: ComponentHealth[];
+}
+
+export interface ComponentHealth {
+	component: string;
+	status: 'HEALTHY' | 'DEGRADED' | 'DOWN';
+	latency_ms: number | null;
+	detail: string | null;
+	checked_at: string;
+}
+
+/** One JSON structured-log event as shown in the Health screen Logs tab */
+export interface LogEntry {
+	ts: string;
+	level: 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
+	component: string;
+	message: string;
+	data?: Record<string, unknown>;
 }
 
 export class ApiError extends Error {

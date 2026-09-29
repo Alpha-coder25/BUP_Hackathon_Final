@@ -2,7 +2,7 @@
 // Never talks to the simulator directly (SystemArchitecture §4 boundary).
 
 import { PUBLIC_API_BASE } from '$env/static/public';
-import { ApiError, type Alert, type Allocation, type Decision, type HealthReport, type Recommendation, type SimState } from './types';
+import { ApiError, type Alert, type Allocation, type Decision, type HealthReport, type LogEntry, type Recommendation, type SimState } from './types';
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
 	let res: Response;
@@ -40,5 +40,6 @@ export const api = {
 			body: JSON.stringify({ note })
 		}),
 	history: () => request<{ decisions: Decision[]; allocations: Allocation[] }>('/api/history'),
-	health: () => request<HealthReport>('/health')
+	health: () => request<HealthReport>('/health'),
+	logs: () => request<LogEntry[]>('/api/logs')
 };
