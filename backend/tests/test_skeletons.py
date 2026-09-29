@@ -136,6 +136,30 @@ def test_optimizer_risk_and_fallback() -> None:
         for d in ("depot-a", "depot-b")))
 
 
+def test_lp_synthetic_route_ids() -> None:
+    """Route×fuel expansion: LP must emit PHYSICAL route ids and respect the
+    per-physical-route max_shipment pool (regression for FK violation)."""
+    fuel = "DIESEL"
+    routes = [
+        RouteOption("r1::DIESEL", "depot-a", "s1", max_shipment=7000, cost_per_liter=1.0, transit_ticks=2),
+        RouteOption("r1::PETROL", "depot-a", "s1", max_shipment=7000, cost_per_liter=1.0, transit_ticks=2),
+        RouteOption("r1::OCTANE", "depot-a", "s1", max_shipment=7000, cost_per_liter=1.0, transit_ticks=2),
+    ]
+    stock = {("depot-a", f): 50000.0 for f in ("DIESEL", "PETROL", "OCTANE")}
+    needs = [
+        StationNeed("s1", "DIESEL", inventory=0, incoming=0, p50_per_tick=300, p90_per_tick=500, station_capacity=30000),
+        StationNeed("s1", "PETROL", inventory=0, incoming=0, p50_per_tick=300, p90_per_tick=500, station_capacity=30000),
+        StationNeed("s1", "OCTANE", inventory=0, incoming=0, p50_per_tick=300, p90_per_tick=500, station_capacity=30000),
+    ]
+    rec = optimize(depot_fuel_stock=stock, depot_dispatch_capacity={"depot-a": 12000},
+                   needs=needs, routes=routes, risk_before={n.key: 0.9 for n in needs})
+    check("synthetic ids stripped to physical route", all(i.route_id == "r1" for i in rec.items),
+          str({i.route_id for i in rec.items}))
+    total = sum(i.quantity for i in rec.items)
+    check("per-physical-route pool respected", total <= 7000 + 0.5, f"total={total}")
+    check("plan still meaningful", total > 3000, f"total={total}")
+
+
 def test_risk_monotone_in_allocation() -> None:
     n = NEEDS[0]
     r0 = stockout_risk(n.inventory, n.incoming, 0, n.p50_per_tick, n.p90_per_tick)
@@ -274,6 +298,7 @@ if __name__ == "__main__":
     t0 = time.time()
     test_liters_needed()
     test_lp_respects_constraints()
+    test_lp_synthetic_route_ids()
     test_optimizer_risk_and_fallback()
     test_risk_monotone_in_allocation()
     test_forecast_features()
