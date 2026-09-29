@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "command": "deliver",
+  "status": "pending",
+  "receiptId": "fa18ef63-ec1a-4d08-8243-4480534c6144",
+  "input": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/candidate.json",
+  "output": "/home/xenon/Documents/GitHub/BUP_Hackathon_Final/.archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html"
+}

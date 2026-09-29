@@ -1,0 +1,493 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Fuel Supply Intelligence & Resilience Platform",
+    "locale": "en",
+    "output": ".archify/architecture-fuel-supply-platform-20260929-113952/fuel-supply-platform.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/Alpha-coder25/BUP_Hackathon_Final.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "c40bd40c5ff82591065a8f636b227dd850faa70a"
+    }
+  },
+  "components": [
+    {
+      "id": "simulator",
+      "type": "external",
+      "label": "BUP Fuel Supply Simulator",
+      "sublabel": ":8000 · REST /v1/* + SSE",
+      "pos": [
+        70,
+        76
+      ],
+      "size": [
+        200,
+        66
+      ],
+      "sources": [
+        {
+          "path": "DOCS/SystemArchitecture.md",
+          "line": 46,
+          "label": "component table"
+        },
+        {
+          "path": "DOCS/TRD.md",
+          "line": 41,
+          "label": "read endpoints"
+        },
+        {
+          "path": "PROBLEMSTATEMENT DOCS/Building a Fuel Supply Intelligence & Resilience Platform Guide.md",
+          "line": 43,
+          "label": "phase 1 ingest"
+        }
+      ]
+    },
+    {
+      "id": "simclient",
+      "type": "backend",
+      "label": "Simulator Client",
+      "sublabel": "retry 1s/2s/4s · last-good cache",
+      "tag": "only egress to /v1/*",
+      "pos": [
+        370,
+        76
+      ],
+      "size": [
+        200,
+        66
+      ],
+      "sources": [
+        {
+          "path": "backend/simulator_client.py",
+          "line": 1,
+          "end_line": 12,
+          "label": "module contract"
+        },
+        {
+          "path": "backend/simulator_client.py",
+          "line": 71,
+          "end_line": 106,
+          "label": "retry + cache"
+        },
+        {
+          "path": "backend/simulator_client.py",
+          "line": 146,
+          "end_line": 148,
+          "label": "idempotency key"
+        }
+      ]
+    },
+    {
+      "id": "collector",
+      "type": "backend",
+      "label": "Collector",
+      "sublabel": "poll 30 s · SSE trigger",
+      "pos": [
+        700,
+        76
+      ],
+      "size": [
+        200,
+        66
+      ],
+      "sources": [
+        {
+          "path": "backend/collector.py",
+          "line": 314,
+          "end_line": 369,
+          "label": "collect_tick"
+        },
+        {
+          "path": "backend/collector.py",
+          "line": 372,
+          "end_line": 383,
+          "label": "persist_snapshot"
+        },
+        {
+          "path": "backend/collector.py",
+          "line": 443,
+          "end_line": 456,
+          "label": "poll + SSE loop"
+        }
+      ]
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "PostgreSQL 16",
+      "sublabel": "22 tables · :5432",
+      "pos": [
+        1030,
+        76
+      ],
+      "size": [
+        200,
+        66
+      ],
+      "sources": [
+        {
+          "path": "backend/models.py",
+          "line": 40,
+          "end_line": 41,
+          "label": "world mirror"
+        },
+        {
+          "path": "backend/models.py",
+          "line": 268,
+          "end_line": 271,
+          "label": "allocations"
+        },
+        {
+          "path": "backend/db.py",
+          "line": 19,
+          "label": "DB_URL"
+        }
+      ]
+    },
+    {
+      "id": "operator",
+      "type": "external",
+      "label": "Fuel Operator",
+      "sublabel": "approve · acknowledge",
+      "pos": [
+        1370,
+        76
+      ],
+      "size": [
+        200,
+        66
+      ],
+      "sources": [
+        {
+          "path": "DOCS/UserFlow.md",
+          "line": 3,
+          "label": "primary actor"
+        },
+        {
+          "path": "DOCS/UserFlow.md",
+          "line": 29,
+          "label": "approve gate"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "FastAPI API",
+      "sublabel": ":8080 · /api/* · /health · /metrics",
+      "pos": [
+        1030,
+        270
+      ],
+      "size": [
+        210,
+        66
+      ],
+      "sources": [
+        {
+          "path": "DOCS/SystemArchitecture.md",
+          "line": 32,
+          "label": "API surface"
+        },
+        {
+          "path": "DOCS/TRD.md",
+          "line": 75,
+          "end_line": 80,
+          "label": "endpoint table"
+        },
+        {
+          "path": "backend/requirements.txt",
+          "line": 3,
+          "label": "fastapi"
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "type": "frontend",
+      "label": "Operator Dashboard",
+      "sublabel": ":3000 · Overview…Health",
+      "pos": [
+        1370,
+        270
+      ],
+      "size": [
+        200,
+        66
+      ],
+      "sources": [
+        {
+          "path": "DOCS/SystemArchitecture.md",
+          "line": 55,
+          "label": "dashboard row"
+        },
+        {
+          "path": "DOCS/ScreenFlow.md",
+          "line": 33,
+          "end_line": 34,
+          "label": "five screens"
+        }
+      ]
+    },
+    {
+      "id": "detect",
+      "type": "backend",
+      "label": "Detect & Predict",
+      "sublabel": "quantile GBM P10/P50/P90",
+      "pos": [
+        700,
+        464
+      ],
+      "size": [
+        210,
+        66
+      ],
+      "sources": [
+        {
+          "path": "backend/forecast.py",
+          "line": 86,
+          "end_line": 96,
+          "label": "quantile models"
+        },
+        {
+          "path": "backend/forecast.py",
+          "line": 99,
+          "end_line": 102,
+          "label": "moving-avg fallback"
+        },
+        {
+          "path": "backend/forecast.py",
+          "line": 141,
+          "end_line": 159,
+          "label": "stockout risk"
+        }
+      ]
+    },
+    {
+      "id": "optimizer",
+      "type": "backend",
+      "label": "Optimizer (LP)",
+      "sublabel": "PuLP/CBC · depot fallback",
+      "pos": [
+        1030,
+        464
+      ],
+      "size": [
+        210,
+        66
+      ],
+      "sources": [
+        {
+          "path": "backend/optimizer.py",
+          "line": 134,
+          "end_line": 200,
+          "label": "solve_lp"
+        },
+        {
+          "path": "backend/optimizer.py",
+          "line": 193,
+          "label": "CBC solver"
+        },
+        {
+          "path": "backend/optimizer.py",
+          "line": 270,
+          "end_line": 325,
+          "label": "heuristic_plan"
+        }
+      ]
+    },
+    {
+      "id": "explainer",
+      "type": "backend",
+      "label": "GenAI Explainer",
+      "sublabel": "3 sentences · template fallback",
+      "pos": [
+        1360,
+        464
+      ],
+      "size": [
+        200,
+        66
+      ],
+      "sources": [
+        {
+          "path": "backend/optimizer.py",
+          "line": 67,
+          "label": "explanation slot"
+        },
+        {
+          "path": "DOCS/BackendImplementation.md",
+          "line": 58,
+          "label": "explainer spec"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Organizer-provided world — reached only over /v1/*",
+      "wraps": [
+        "simulator"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Platform runtime",
+      "wraps": [
+        "simclient",
+        "collector",
+        "db",
+        "api",
+        "dashboard",
+        "detect",
+        "optimizer",
+        "explainer"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Intelligence tier — run_pipeline is a log stub today",
+      "wraps": [
+        "detect",
+        "optimizer",
+        "explainer"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "read-v1",
+      "from": "simulator",
+      "to": "simclient",
+      "label": "GET /v1/* reads"
+    },
+    {
+      "id": "client-handoff",
+      "from": "simclient",
+      "to": "collector",
+      "label": "retry then cache"
+    },
+    {
+      "id": "persist",
+      "from": "collector",
+      "to": "db",
+      "label": "upsert + append"
+    },
+    {
+      "id": "forecast",
+      "from": "detect",
+      "to": "db",
+      "label": "forecasts · risk",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "auto"
+    },
+    {
+      "id": "recommend",
+      "from": "optimizer",
+      "to": "db",
+      "label": "recommendations",
+      "fromSide": "top",
+      "toSide": "right"
+    },
+    {
+      "id": "state-query",
+      "from": "db",
+      "to": "api",
+      "label": "SQL read",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "serve",
+      "from": "api",
+      "to": "dashboard",
+      "label": "REST JSON"
+    },
+    {
+      "id": "show",
+      "from": "dashboard",
+      "to": "operator",
+      "label": "shows state",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "approve",
+      "from": "operator",
+      "to": "api",
+      "label": "approve · ack",
+      "variant": "emphasis",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "write-back",
+      "from": "api",
+      "to": "simclient",
+      "label": "POST /v1/allocations · idempotency-keyed",
+      "variant": "emphasis",
+      "fromSide": "left",
+      "toSide": "bottom",
+      "route": "auto"
+    },
+    {
+      "id": "risk-handoff",
+      "from": "detect",
+      "to": "optimizer",
+      "label": "risk · needs"
+    },
+    {
+      "id": "plan",
+      "from": "optimizer",
+      "to": "explainer",
+      "label": "plan items"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Ingest & truth",
+      "items": [
+        "One direction of truth: simulator → Postgres → API → UI. The dashboard never calls the simulator.",
+        "REST is the source of truth; SSE /v1/stream only triggers a re-GET, with no Last-Event-ID replay (backend/simulator_client.py:30, backend/collector.py:418).",
+        "Nine /v1/* reads plus per-station demand-history are assembled into one WorldSnapshot per tick (backend/collector.py:314).",
+        "No anchor from /v1/instance means no snapshot, so the UI shows “no data” instead of zeros (backend/collector.py:338)."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Decision loop",
+      "items": [
+        "No allocation without an approved recommendation; every item carries idempotency_key = {recommendation_id}:{item_seq} (backend/simulator_client.py:146).",
+        "Approve issues one POST /v1/allocations per item; status moves PENDING → IN_TRANSIT → ARRIVED/FAILED (backend/models.py:268).",
+        "Risk is recomputed per tick and again on every allocation status change (backend/collector.py:418).",
+        "The dashboard disables Approve whenever the collector reports stale data (DOCS/UserFlow.md:29)."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Resilience by design",
+      "items": [
+        "Three attempts at 1s/2s/4s, then the last-good payload is served with is_stale=true (backend/simulator_client.py:71).",
+        "X-Simulator-Stale is served once and never poisons the cache (backend/simulator_client.py:100).",
+        "Forecaster drops to a 6-tick moving average below 20 history rows (backend/forecast.py:86).",
+        "Optimizer drops to nearest-depot greedy and sets human_review_requested (backend/optimizer.py:270)."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Design vs. committed code",
+      "items": [
+        "collector.run_pipeline() only logs, so detect, optimize and explain are not yet on the runtime path (backend/collector.py:386).",
+        "Redis :6379 is declared in backend/requirements.txt:8, but no committed module reads it.",
+        "anomaly.py, explainer.py, risk.py and health.py are specified in DOCS/BackendImplementation.md:13 but not created yet.",
+        "docker compose brings up db, redis, the organizer image, api and web; there is no CI workflow and no load-test config yet."
+      ]
+    }
+  ]
+}
